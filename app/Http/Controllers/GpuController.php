@@ -14,7 +14,7 @@ class GpuController extends Controller
      */
     public function index()
     {
-        //
+        return view('gpus.index');
     }
 
     /**
