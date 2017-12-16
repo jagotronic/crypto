@@ -3,7 +3,11 @@
 @import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
 
 // Variables
-@import "variables";
+@import "bootswatch/sandstone/variables";
 
 // Bootstrap
 @import "~bootstrap-sass/assets/stylesheets/bootstrap";
+
+// Bootswatch sandstone them
+@import "bootswatch/sandstone/bootswatch"; 
+
