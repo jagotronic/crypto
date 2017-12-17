@@ -14,7 +14,7 @@ class CurrencyController extends Controller
      */
     public function index()
     {
-        //
+        return view('currencies.index');
     }
 
     /**
@@ -24,7 +24,7 @@ class CurrencyController extends Controller
      */
     public function create()
     {
-        //
+        return view('currencies.create');
     }
 
     /**

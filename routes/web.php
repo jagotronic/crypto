@@ -12,14 +12,15 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 
 Auth::routes();
 
 Route::group(['middleware' => ['auth']], function($router) {
 	$router->resources([
-		'gpus' => 'GpuController'
+		'gpus' => 'GpuController',
+		'currencies' => 'CurrencyController'
 	]);
 });
 
