@@ -16,10 +16,10 @@ class CreateCurrenciesTable extends Migration
         Schema::create('currencies', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('symbol');
-            $table->float('usd_value');
-            $table->float('cad_value');
-            $table->float('btc_value');
+            $table->string('symbol')->unique();
+            $table->decimal('usd_value', 16, 8)->nullable();
+            $table->decimal('cad_value', 16, 8)->nullable();
+            $table->decimal('btc_value', 16, 8)->nullable();
             $table->string('description');
             $table->timestamps();
         });

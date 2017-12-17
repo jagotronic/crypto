@@ -14,7 +14,8 @@ class CurrencyController extends Controller
      */
     public function index()
     {
-        return view('currencies.index');
+        $currencies = Currency::all();
+        return view('currencies.index', ['currencies'=>$currencies]);
     }
 
     /**
@@ -35,7 +36,24 @@ class CurrencyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:191|unique:currencies,name,'.$request->get('id'),
+            'symbol' => 'required|string|max:191|unique:currencies,symbol,'.$request->get('id'),
+            'usd_value' => 'nullable|regex:/[\d]{0,8}.[\d]{0,8}/',
+            'cad_value' => 'nullable|regex:/[\d]{0,8}.[\d]{0,8}/',
+            'btc_value' => 'nullable|regex:/[\d]{0,8}.[\d]{0,8}/'
+        ]);
+
+        $currency = new Currency();
+        $currency->name = request('name');
+        $currency->symbol = request('symbol');
+        $currency->usd_value = request('usd_value', null);
+        $currency->cad_value = request('cad_value', null);
+        $currency->btc_value = request('btc_value', null);
+        $currency->description = request('description', '');
+        $currency->save();
+
+        return redirect('currencies');
     }
 
     /**
@@ -55,9 +73,10 @@ class CurrencyController extends Controller
      * @param  \App\Currency  $currency
      * @return \Illuminate\Http\Response
      */
-    public function edit(Currency $currency)
+    public function edit(Request $request, Currency $currency)
     {
-        //
+        print_r($request->all());
+        return view('currencies.edit', ['currency' => $currency]);
     }
 
     /**
@@ -69,7 +88,16 @@ class CurrencyController extends Controller
      */
     public function update(Request $request, Currency $currency)
     {
-        //
+        $currency->name = request('name');
+        $currency->symbol = request('symbol');
+        $currency->usd_value = request('usd_value', null);
+        $currency->cad_value = request('cad_value', null);
+        $currency->btc_value = request('btc_value', null);
+        $currency->description = request('description', '');
+        $currency->save();
+
+        $request->session()->flash('message', 'Currency successfully updated!');
+        return redirect('currencies');
     }
 
     /**
@@ -78,8 +106,11 @@ class CurrencyController extends Controller
      * @param  \App\Currency  $currency
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Currency $currency)
+    public function destroy(Request $request, Currency $currency)
     {
-        //
+        $currency->delete();
+        $request->session()->flash('message', 'Currency successfully deleted!');
+
+        return redirect('currencies');
     }
 }

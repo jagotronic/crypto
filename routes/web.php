@@ -22,6 +22,7 @@ Route::group(['middleware' => ['auth']], function($router) {
 		'gpus' => 'GpuController',
 		'currencies' => 'CurrencyController'
 	]);
+
+	Route::get('/home', 'HomeController@index')->name('home');
 });
 
-Route::get('/home', 'HomeController@index')->name('home');
