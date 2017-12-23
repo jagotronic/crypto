@@ -29,5 +29,17 @@ class CurrenciesTableSeeder extends Seeder
             'api_path' => 'zcash',
             'description' => ''
         ]);
+        DB::table('currencies')->insert([
+            'name' => 'AltCommunity Coin',
+            'symbol' => 'ALTCOM',
+            'api_path' => 'altcommunity-coin',
+            'description' => ''
+        ]);
+        DB::table('currencies')->insert([
+            'name' => 'Bitcoin',
+            'symbol' => 'BTC',
+            'api_path' => 'bitcoin',
+            'description' => ''
+        ]);
     }
 }
