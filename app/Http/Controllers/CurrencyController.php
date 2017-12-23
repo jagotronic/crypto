@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Currency;
 use Illuminate\Http\Request;
+use App\Jobs\FetchCurrencies;
+use App\Helpers\CurrenciesUpdater;
 
 class CurrencyController extends Controller
 {
@@ -36,13 +38,7 @@ class CurrencyController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:191|unique:currencies,name,'.$request->get('id'),
-            'symbol' => 'required|string|max:191|unique:currencies,symbol,'.$request->get('id'),
-            'usd_value' => 'nullable|regex:/[\d]{0,8}.[\d]{0,8}/',
-            'cad_value' => 'nullable|regex:/[\d]{0,8}.[\d]{0,8}/',
-            'btc_value' => 'nullable|regex:/[\d]{0,8}.[\d]{0,8}/'
-        ]);
+        $this->validateMe($request);
 
         $currency = new Currency();
         $currency->name = request('name');
@@ -53,6 +49,7 @@ class CurrencyController extends Controller
         $currency->description = request('description', '');
         $currency->save();
 
+        $request->session()->flash('message', 'Currency successfully created!');
         return redirect('currencies');
     }
 
@@ -75,7 +72,6 @@ class CurrencyController extends Controller
      */
     public function edit(Request $request, Currency $currency)
     {
-        print_r($request->all());
         return view('currencies.edit', ['currency' => $currency]);
     }
 
@@ -88,6 +84,8 @@ class CurrencyController extends Controller
      */
     public function update(Request $request, Currency $currency)
     {
+        $this->validateMe($request);
+
         $currency->name = request('name');
         $currency->symbol = request('symbol');
         $currency->usd_value = request('usd_value', null);
@@ -112,5 +110,25 @@ class CurrencyController extends Controller
         $request->session()->flash('message', 'Currency successfully deleted!');
 
         return redirect('currencies');
+    }
+
+    public function refresh() {
+        CurrenciesUpdater::updateAll();
+    }
+
+    /**
+     * Model validation method
+     * @param  Request $request
+     * @return [void]
+     */
+    private function validateMe(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:191|unique:currencies,name,'.$request->get('id'),
+            'symbol' => 'required|string|max:191|unique:currencies,symbol,'.$request->get('id'),
+            'usd_value' => 'nullable|regex:/[\d]{0,8}.[\d]{0,8}/',
+            'cad_value' => 'nullable|regex:/[\d]{0,8}.[\d]{0,8}/',
+            'btc_value' => 'nullable|regex:/[\d]{0,8}.[\d]{0,8}/'
+        ]);
     }
 }

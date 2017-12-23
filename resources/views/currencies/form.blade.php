@@ -56,7 +56,7 @@
 
             <!-- BTC value -->
             <div class="form-group">
-                <label for="task" class="col-sm-3 control-label">BTC</label>
+                <label for="task" class="col-sm-3 control-label">Description</label>
 
                 <div class="col-sm-6">
                     <textarea name="description" class="form-control">{{ old('description', !empty($currency) ? $currency->description : '') }}</textarea>

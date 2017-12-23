@@ -17,6 +17,7 @@ class CreateCurrenciesTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('symbol')->unique();
+            $table->string('api_path')->unique();
             $table->decimal('usd_value', 16, 8)->nullable();
             $table->decimal('cad_value', 16, 8)->nullable();
             $table->decimal('btc_value', 16, 8)->nullable();

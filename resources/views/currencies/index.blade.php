@@ -11,7 +11,7 @@
 				@include('commun.message')
 
 			    @if (count($currencies) > 0)
-			        <h2>List of currencies</h2>
+			        <h2>List of currencies <button class="btn btn-info btn-sm pull-right js-refreshCurrencies">refresh currencies</button></h2>
 				</div>
 				@include('currencies.list')
                 <div class="panel-body">
@@ -24,4 +24,13 @@
         </div>
     </div>
 </div>
+@endsection
+@section('scripts')
+<script>
+    $(function() {
+        $('.js-refreshCurrencies').on('click', function() {
+            $.get()
+        })
+    })
+</script>
 @endsection
