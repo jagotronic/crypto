@@ -17,6 +17,7 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
                         <li><a href="/currencies">Currencies</a></li>
+                        <li><a href="/wallets">Wallets</a></li>
                         <li><a href="/gpus">GPUs</a></li>
                         <!-- <li class="dropdown">
                           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>

@@ -18,9 +18,13 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::group(['middleware' => ['auth']], function($router) {
+
+	Route::get('/currencies/refresh', 'CurrencyController@refresh')->name('currencies.refresh');
+
 	$router->resources([
 		'gpus' => 'GpuController',
-		'currencies' => 'CurrencyController'
+		'currencies' => 'CurrencyController',
+		'wallets' => 'WalletController',
 	]);
 
 	Route::get('/home', 'HomeController@index')->name('home');
