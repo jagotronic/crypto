@@ -5,6 +5,7 @@
                     <thead>
                         <th>Name</th>
                         <th>Symbol</th>
+                        <th>API</th>
                         <th>USD</th>
                         <th>CAD</th>
                         <th>BTC</th>
@@ -21,6 +22,9 @@
                                 </td>
                                 <td>
                                     <div>{{ $currency->symbol }}</div>
+                                </td>
+                                <td>
+                                    <div>{{ $currency->api_path }}</div>
                                 </td>
                                 <td>
                                     <div>{{ $currency->usd_value }}</div>

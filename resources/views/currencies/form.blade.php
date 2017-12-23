@@ -27,6 +27,15 @@
                 </div>
             </div>
 
+            <!-- Currency Symbol -->
+            <div class="form-group">
+                <label for="task" class="col-sm-3 control-label">API path</label>
+
+                <div class="col-sm-6">
+                    <input type="text" name="api_path" value="{{ old('api_path', !empty($currency) ? $currency->api_path : '') }}" id="task-name" class="form-control">
+                </div>
+            </div>
+
             <!-- USD value -->
             <div class="form-group">
                 <label for="task" class="col-sm-3 control-label">USD</label>
