@@ -1,5 +1,5 @@
 
-                <table class="table table-striped task-table" style="table-layout: fixed;">
+                <table class="table table-striped task-table">
 
                     <!-- Table Headings -->
                     <thead>
