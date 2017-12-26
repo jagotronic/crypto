@@ -26,6 +26,7 @@ class CurrenciesUpdater {
 		curl_close($ch);
 
 		$json = json_decode($result, true);
+
 		$currency->usd_value = $json[0]['price_usd'];
 		$currency->cad_value = $json[0]['price_cad'];
 		$currency->btc_value = $json[0]['price_btc'];
