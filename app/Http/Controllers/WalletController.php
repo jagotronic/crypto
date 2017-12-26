@@ -26,7 +26,7 @@ class WalletController extends Controller
      */
     public function create()
     {
-        return view('wallets.create', ['currencies' => Currency::all()]);
+        return view('wallets.create', ['handlers' => Wallet::getHandlers()]);
     }
 
     /**
@@ -41,11 +41,9 @@ class WalletController extends Controller
 
         $wallet = new Wallet();
         $wallet->name = request('name');
-        $wallet->address = request('address');
-        $wallet->currency_id = request('currency_id');
-        $wallet->type = request('type');
-        $wallet->amount = request('amount');
+        $wallet->handler = request('handler');
         $wallet->description = request('description', '');
+        $wallet->data = request('data', []);
         $wallet->save();
 
         $request->session()->flash('message', 'Currency successfully created!');
@@ -71,7 +69,7 @@ class WalletController extends Controller
      */
     public function edit(Wallet $wallet)
     {
-        return view('wallets.edit', ['wallet' => $wallet, 'currencies' => Currency::all()]);
+        return view('wallets.edit', ['wallet' => $wallet, 'handlers' => Wallet::getHandlers()]);
     }
 
     /**
@@ -86,11 +84,9 @@ class WalletController extends Controller
         $this->validateMe($request);
 
         $wallet->name = request('name');
-        $wallet->address = request('address');
-        $wallet->currency_id = request('currency_id');
-        $wallet->type = request('type');
-        $wallet->amount = request('amount');
+        $wallet->handler = request('handler');
         $wallet->description = request('description', '');
+        $wallet->data = request('data', []);
         $wallet->save();
 
         $request->session()->flash('message', 'Wallet successfully updated!');
@@ -113,12 +109,22 @@ class WalletController extends Controller
 
     private function validateMe(Request $request)
     {
-        $request->validate([
+        $rules = [
             'name' => 'required|string|max:191|unique:wallets,name,'.$request->get('id'),
-            'address' => 'required|string|min:26|max:34',
-            'currency_id' => 'required|exists:currencies,id',
-            'type' => 'required|in:wallet,pool,exchange',
-            'amount' => 'required|regex:/[\d]{0,8}.[\d]{0,8}/',
-        ]);
+            'handler' => 'required|string|min:15',
+        ];
+
+        $handler = $request->get('handler');
+
+        if (strlen($handler)) {
+            $classPath = '\\App\\Helpers\\WalletHandlers\\' . $request->get('handler');
+            $a = new $classPath();
+
+            foreach ($a->params as $key => $value) {
+                $rules['data.' . $request->get('handler') . '.' . $key] = $value;
+            }
+        }
+
+        $request->validate($rules);
     }
 }

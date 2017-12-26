@@ -2,7 +2,7 @@
         @include('commun.errors')
         
         <!-- New Task Form -->
-        <form action="{{ !empty($wallet) ? url('wallets/'. $wallet->id) : url('wallets') }}" method="POST" class="form-horizontal">
+        <form id="WalletForm" action="{{ !empty($wallet) ? url('wallets/'. $wallet->id) : url('wallets') }}" method="POST" class="form-horizontal">
             {{ csrf_field() }}
             @if(!empty($wallet))
             <input type="hidden" name="_method" value="PUT">
@@ -18,59 +18,35 @@
                 </div>
             </div>
 
-            <!-- Wallet address -->
+            <!-- Handler -->
             <div class="form-group">
-                <label for="task" class="col-sm-3 control-label">Address</label>
+                <label for="task" class="col-sm-3 control-label">Handler</label>
 
                 <div class="col-sm-6">
-                    <input type="text" name="address" value="{{ old('address', !empty($wallet) ? $wallet->address : '') }}" class="form-control">
-                </div>
-            </div>
-
-            <!-- Wallet currency -->
-            <div class="form-group">
-                <label for="task" class="col-sm-3 control-label">Currency Symbol</label>
-
-                <div class="col-sm-6">
-                    <select class="form-control" name="currency_id">
-{{ $currency_id = old('currency_id', !empty($wallet) ? $wallet->currency_id : '') }}
+                    <select class="form-control" name="handler" id="handler">
                         <option value="">Choose</option>
-@foreach ($currencies as $currency)
-                        <option value="{{ $currency->id }}" {{ $currency_id == $currency->id ? "selected" : "" }}>
-                            {{ $currency->name }}
+@foreach ($handlers as $h)
+                        <option value="{{ $h['id'] }}" {{ old('handler', !empty($wallet) ? $wallet->handler : '') == $h['id'] ? "selected" : "" }}>
+                            {{ trans($h['name']) }}
                         </option>
 @endforeach
                     </select>
                 </div>
             </div>
 
-            <!-- Amount -->
-            <div class="form-group">
-                <label for="task" class="col-sm-3 control-label">Amount</label>
+@foreach ($handlers as $h)
+    @foreach ($h['params'] as $param)
+            <div class="form-group hidden handler-{{ $h['id'] }}">
+                <label for="task" class="col-sm-3 control-label">{{ trans($param) }}</label>
 
                 <div class="col-sm-6">
-                    <input type="text" name="amount" value="{{ old('amount', !empty($wallet) ? $wallet->amount : '') }}" id="task-name" class="form-control">
+                    <input type="text" name="data[{{ $h['id'] }}][{{ $param }}]" value="{{ old('data.' . $h['id'] . '.' . $param, !empty($wallet) && !empty($wallet->data[$h['id']][$param]) ? $wallet->data[$h['id']][$param] : '') }}" class="form-control">
                 </div>
             </div>
-
-            <!-- USD value -->
-            <div class="form-group">
-                <label for="task" class="col-sm-3 control-label">Type</label>
-
-                <div class="col-sm-6">
-{{ $type = old('type', !empty($wallet) ? $wallet->type : '') }}
-                    <select class="form-control" name="type">
-                        <option value="">Choose</option>
-@foreach (['wallet','exchange','pool'] as $t)
-                        <option value="{{ $t }}" {{ $type == $t ? "selected" : "" }}>
-                            {{ trans($t) }}
-                        </option>
+    @endforeach
 @endforeach
-                    </select>
-                </div>
-            </div>
 
-            <!-- BTC value -->
+            <!-- Description -->
             <div class="form-group">
                 <label for="task" class="col-sm-3 control-label">Description</label>
 
@@ -79,7 +55,7 @@
                 </div>
             </div>
 
-            <!-- Add Task Button -->
+            <!-- Buttons -->
             <div class="form-group">
                 <div class="col-sm-offset-3 col-sm-6">
                     <a href="{{ url('wallets') }}" class="btn btn-default">
@@ -91,3 +67,25 @@
                 </div>
             </div>
         </form>
+
+@section('scripts')
+        <script>
+            var $hiddens = $('.hidden');
+
+            function updateHandlers() {
+                let handler = $('#handler').val();
+                $hiddens.addClass('hidden');
+
+                if (handler) {
+                    console.log('.handler-' + handler)
+                    $hiddens.filter('.handler-' + handler).removeClass('hidden');
+                }
+            }
+
+            // $('#WalletForm').on('update.handler_params', updateHandlers);
+
+            $('#handler').on('change', updateHandlers)
+
+            updateHandlers();
+        </script>
+@endsection
