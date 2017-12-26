@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Helpers\WalletHandlers;
-namespace App\Wallet;
+use App\Wallet;
 
 class BittrexWalletHandler {
 
