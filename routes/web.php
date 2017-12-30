@@ -24,9 +24,14 @@ Route::group(['middleware' => ['auth']], function($router) {
 	$router->resources([
 		'gpus' => 'GpuController',
 		'currencies' => 'CurrencyController',
+		'balances' => 'BalanceController',
 		'wallets' => 'WalletController',
 	]);
 
 	Route::get('/home', 'HomeController@index')->name('home');
+
+	Route::get('/summary', function() {
+		App\Helpers\WalletsUpdater::updateAll();
+	})->name('summary');
 });
 

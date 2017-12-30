@@ -15,8 +15,17 @@ class WalletsTableSeeder extends Seeder
             'name' => 'My Bittrex account',
             'handler' => 'BittrexWalletHandler',
             'data' => json_encode([
-				'apikey' => '39b9169c47bc486ab590fd364c099794',
-				'apisecret' => 'ce2cd1aba22b45c5b13a54f829bb9b26'
+                'apikey' => env('BITTREX_APIKEY', null),
+                'apisecret' => env('BITTREX_APISECRET', null),
+            ]),
+            'description' => ''
+        ]);
+        DB::table('wallets')->insert([
+            'name' => 'My Kucoin account',
+            'handler' => 'KucoinWalletHandler',
+            'data' => json_encode([
+                'apikey' => env('KUCOIN_APIKEY', null),
+                'apisecret' => env('KUCOIN_APISECRET', null),
             ]),
             'description' => ''
         ]);

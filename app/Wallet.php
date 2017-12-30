@@ -9,11 +9,19 @@ class Wallet extends Model
 {
 
     /**
-     * Get balances of Wallet.
+     * Get wallet balances
      */
     public function balances()
     {
         return $this->hasMany('App\Balance');
+    }
+
+    /**
+     * Get wallet balances of specific currency
+     */
+    public function balancesOfSymbol(string $symbol)
+    {
+        return $this->balances->where('symbol', $symbol)->first();
     }
 
     public function getRawDataAttribute()

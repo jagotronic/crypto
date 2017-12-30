@@ -2,6 +2,7 @@
 
 namespace App\Helpers\WalletHandlers;
 use App\Wallet;
+use App\Balance;
 
 class BittrexWalletHandler extends WalletHandler {
 
@@ -26,13 +27,29 @@ class BittrexWalletHandler extends WalletHandler {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array('apisign:'. $sign));
 		$execResult = curl_exec($ch);
-		$obj = json_decode($execResult);
+		curl_close($ch);
 
-		foreach ($obj->result as $balance) {
-			$currency = $this->findCurrencyBySymbol($balance->Currency);
+		if ($execResult === false) {
+			throw new \Exception('SERVER NOT RESPONDING');
+		}
 
-			// create Balance here
-			// dd($currency->toArray());
+		$json = json_decode($execResult);
+
+		if (empty($json->success)) {
+			throw new \Exception($json->message);
+		}
+
+		foreach ($json->result as $JsonBalance) {
+			$balance = $wallet->balancesOfSymbol($JsonBalance->Currency);
+
+			if (is_null($balance)) {
+				$balance = new Balance();
+				$balance->wallet_id = $wallet->id;
+				$balance->symbol = $JsonBalance->Currency;
+			}
+
+			$balance->value = $JsonBalance->Balance;
+			$balance->save();
 		}
 
 	}
