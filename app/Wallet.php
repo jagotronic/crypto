@@ -3,33 +3,52 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Factories\WalletHandlerFactory;
 
 class Wallet extends Model
 {
 
-    protected $casts = [
-        'data' => 'array',
-    ];
-
     /**
-     * Get the amounts of Wallet.
+     * Get balances of Wallet.
      */
-    public function amounts()
+    public function balances()
     {
-        return $this->hasMany('App\Amounts');
+        return $this->hasMany('App\Balance');
+    }
+
+    public function getRawDataAttribute()
+    {
+        return json_decode($this->attributes['data'], true);
+    }
+
+    public function getDataAttribute()
+    {
+        return [
+            $this->attributes['handler'] => json_decode($this->attributes['data'], true)
+        ];
+    }
+
+    public function setDataAttribute($data)
+    {
+        $this->attributes['data'] = json_encode($data[$this->attributes['handler']]);
     }
 
     static function getHandlers()
     {
-        return array_map(function($classname) {
+        $handlers = [];
+
+        foreach (config('wallethandlers') as $classname) {
             $handler = new $classname();
             $reflectionClass = new \ReflectionClass($handler);
 
-            return [
+            $handlers[$reflectionClass->getShortName()] = [
                 'id' => $reflectionClass->getShortName(),
-                'name' => $handler->name,
-                'params' => array_keys($handler->params)
+                'name' => $handler->getName(),
+                'fields' => $handler->getFields(),
+                'validation' => $handler->validation,
             ];
-        }, config('wallethandlers'));
+        }
+
+        return $handlers;
     }
 }

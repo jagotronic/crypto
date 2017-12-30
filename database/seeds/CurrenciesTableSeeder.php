@@ -41,5 +41,11 @@ class CurrenciesTableSeeder extends Seeder
             'api_path' => 'bitcoin',
             'description' => ''
         ]);
+        DB::table('currencies')->insert([
+            'name' => 'Ethereum',
+            'symbol' => 'ETH',
+            'api_path' => 'ethereum',
+            'description' => ''
+        ]);
     }
 }

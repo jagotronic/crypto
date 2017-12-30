@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Wallet;
 use App\Currency;
+use App\Factories\WalletHandlerFactory;
+use App\Wallet;
 use Illuminate\Http\Request;
 
 class WalletController extends Controller
@@ -26,7 +27,7 @@ class WalletController extends Controller
      */
     public function create()
     {
-        return view('wallets.create', ['handlers' => Wallet::getHandlers()]);
+        return view('wallets.create', ['handlers' => $this->getHandlers()]);
     }
 
     /**
@@ -69,7 +70,7 @@ class WalletController extends Controller
      */
     public function edit(Wallet $wallet)
     {
-        return view('wallets.edit', ['wallet' => $wallet, 'handlers' => Wallet::getHandlers()]);
+        return view('wallets.edit', ['wallet' => $wallet, 'handlers' => $this->getHandlers()]);
     }
 
     /**
@@ -111,20 +112,24 @@ class WalletController extends Controller
     {
         $rules = [
             'name' => 'required|string|max:191|unique:wallets,name,'.$request->get('id'),
-            'handler' => 'required|string|min:15',
+            'handler' => 'required|valid_wallet_handler|string|min:15',
         ];
 
-        $handler = $request->get('handler');
+        $handlerClassName = $request->get('handler');
 
-        if (strlen($handler)) {
-            $classPath = '\\App\\Helpers\\WalletHandlers\\' . $request->get('handler');
-            $a = new $classPath();
+        if (strlen($handlerClassName)) {
+            $handler = WalletHandlerFactory::get($handlerClassName);
 
-            foreach ($a->params as $key => $value) {
-                $rules['data.' . $request->get('handler') . '.' . $key] = $value;
+            foreach ($handler->validation as $attribute => $rule) {
+                $rules['data.' . $handlerClassName . '.' . $attribute] = $rule;
             }
         }
 
         $request->validate($rules);
+    }
+
+    private function getHandlers()
+    {
+        return Wallet::getHandlers();
     }
 }

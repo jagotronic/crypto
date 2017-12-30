@@ -34,17 +34,10 @@
                 </div>
             </div>
 
-@foreach ($handlers as $h)
-    @foreach ($h['params'] as $param)
-            <div class="form-group hidden handler-{{ $h['id'] }}">
-                <label for="task" class="col-sm-3 control-label">{{ trans($param) }}</label>
-
-                <div class="col-sm-6">
-                    <input type="text" name="data[{{ $h['id'] }}][{{ $param }}]" value="{{ old('data.' . $h['id'] . '.' . $param, !empty($wallet) && !empty($wallet->data[$h['id']][$param]) ? $wallet->data[$h['id']][$param] : '') }}" class="form-control">
-                </div>
-            </div>
-    @endforeach
-@endforeach
+            @include('wallets.form_handlers', [
+                'handlers' => $handlers,
+                'wallet' => !empty($wallet) ? $wallet : null,
+            ])
 
             <!-- Description -->
             <div class="form-group">

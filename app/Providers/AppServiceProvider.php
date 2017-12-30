@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Validator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +14,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Validator::extend('valid_wallet_handler', function($attribute, $value, $parameters, $validator) {
+            $valid_handler = config('wallethandlers');
+            $classPath = 'App\\Helpers\\WalletHandlers\\' . $value;
+
+            if (in_array($classPath, $valid_handler)) {
+                return true;
+            }
+
+            return false;
+        });
     }
 
     /**
