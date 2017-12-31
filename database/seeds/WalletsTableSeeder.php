@@ -39,6 +39,15 @@ class WalletsTableSeeder extends Seeder
             ]),
             'description' => ''
         ]);
+        DB::table('wallets')->insert([
+            'name' => 'My Cryptopia account',
+            'handler' => 'CryptopiaWalletHandler',
+            'data' => json_encode([
+                'apikey' => env('CRYPTOPIA_APIKEY', null),
+                'apisecret' => env('CRYPTOPIA_APISECRET', null),
+            ]),
+            'description' => ''
+        ]);
         // Coinsmarkets API down
         // DB::table('wallets')->insert([
         //     'name' => 'My Coinsmarkets account',

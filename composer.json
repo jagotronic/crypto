@@ -22,7 +22,8 @@
             "database/factories"
         ],
         "files": [
-            "app/Helpers/PHPQuery.php"
+            "app/Helpers/PHPQuery.php",
+            "app/Helpers/CryptopiaApi/cryptopiaAPI.php"
         ],
         "psr-4": {
             "App\\": "app/"

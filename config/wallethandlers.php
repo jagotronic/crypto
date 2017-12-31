@@ -6,6 +6,7 @@ return [
 	App\Helpers\WalletHandlers\GobyteWalletHandler::class,
 	App\Helpers\WalletHandlers\CryptohubWalletHandler::class,
 	App\Helpers\WalletHandlers\ZcashWalletHandler::class,
+	App\Helpers\WalletHandlers\CryptopiaWalletHandler::class,
 	App\Helpers\WalletHandlers\DesireWalletHandler::class,
 	App\Helpers\WalletHandlers\YobitWalletHandler::class,
 	App\Helpers\WalletHandlers\ZecNanopoolWalletHandler::class,
