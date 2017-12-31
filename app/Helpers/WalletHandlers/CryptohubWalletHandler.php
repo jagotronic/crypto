@@ -55,23 +55,3 @@ class CryptohubWalletHandler extends WalletHandler {
 		}
 	}
 }
-
-
-/**
- * INVALID API CALL
- {
-  "timestamp": 1514654640200
-  "status": 404
-  "error": "Not Found"
-  "message": "No message available"
-  "path": "/account/balasnce"
-}
- * BAD ACCESS
- {
-  "code": "UNAUTH"
-  "msg": "Invalid API Key"
-  "success": false
-  "timestamp": 1514654625422
-}
- * SERVER NOT RESPONDING
- NULL

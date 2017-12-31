@@ -31,15 +31,6 @@ class UniminingWalletHandler extends WalletHandler {
 		}
 		$json = json_decode($execResult);
 
-		/**
-			"currency": "GBX"
-			"unsold": 0
-			"balance": 0.0
-			"unpaid": 0.0
-			"paid24h": 0.36064723
-			"total": 0.36064723
-		 */
-
 		$symbol = $json->currency;
 		/** @var App\Balance */
 		$balance = $wallet->balancesOfSymbol($symbol);

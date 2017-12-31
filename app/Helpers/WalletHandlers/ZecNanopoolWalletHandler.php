@@ -33,15 +33,6 @@ class ZecNanopoolWalletHandler extends WalletHandler {
 			throw new \Exception($json->error);
 		}
 
-		/**
-		    +"account": "{address}"
-		    +"unconfirmed_balance": "0.00000000"
-		    +"balance": "0.00373500"
-		    +"hashrate": "0.0"
-		    +"avgHashrate": {#313 ▶}
-		    +"workers": []
-		 */
-
 		$symbol = 'ZEC';
 		/** @var App\Balance */
 		$balance = $wallet->balancesOfSymbol($symbol);
