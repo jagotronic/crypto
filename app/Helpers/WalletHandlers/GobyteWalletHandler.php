@@ -18,7 +18,7 @@ class GobyteWalletHandler extends WalletHandler {
 	{
 		$address = $wallet->raw_data['address'];
 		$nonce = time();
-		$uri = 'http://explorer.gobyte.network:5001/ext/getbalance/'. $address;
+		$uri = 'http://gobyte.ezmine.io/ext/getbalance/'. $address;
 		$ch = curl_init($uri);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		// curl_setopt($ch, CURLOPT_HTTPHEADER, array('apisign:'. $sign));
