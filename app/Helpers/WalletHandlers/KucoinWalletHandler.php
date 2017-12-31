@@ -28,6 +28,10 @@ class KucoinWalletHandler extends WalletHandler {
 		$querystring = '';
 		$signstring = $endpoint.'/'.$nonce.'/'.$querystring;
 		$hash = hash_hmac('sha256',  base64_encode($signstring) , $ku_secret);
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $host . $endpoint);
+
 		$headers = [
 		  'KC-API-SIGNATURE:' . $hash,
 		  'KC-API-KEY:' . $ku_key,
@@ -52,20 +56,19 @@ class KucoinWalletHandler extends WalletHandler {
 		}
 
 		$json = json_decode($outpout);
-
 		if (!empty($json->error)) {
 			throw new \Exception($json->error);
 		}
 
 		foreach ($json->data as $JsonBalance) {
-
-			if ($JsonBalance->balance == 0) {
-				continue;
-			}
-
 			$balance = $wallet->balancesOfSymbol($JsonBalance->coinType);
 
 			if (is_null($balance)) {
+
+				if ($JsonBalance->balance == 0) {
+					continue;
+				}
+
 				$balance = new Balance();
 				$balance->wallet_id = $wallet->id;
 				$balance->symbol = $JsonBalance->coinType;

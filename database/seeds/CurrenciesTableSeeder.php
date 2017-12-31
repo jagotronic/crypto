@@ -47,5 +47,11 @@ class CurrenciesTableSeeder extends Seeder
             'api_path' => 'ethereum',
             'description' => ''
         ]);
+        DB::table('currencies')->insert([
+            'name' => 'Solaris',
+            'symbol' => 'XLR',
+            'api_path' => 'solaris',
+            'description' => ''
+        ]);
     }
 }

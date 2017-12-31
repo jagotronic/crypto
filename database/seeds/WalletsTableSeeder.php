@@ -12,7 +12,7 @@ class WalletsTableSeeder extends Seeder
     public function run()
     {
         DB::table('wallets')->insert([
-            'name' => 'My Bittrex account',
+            'name' => 'My Bittrex\'s account',
             'handler' => 'BittrexWalletHandler',
             'data' => json_encode([
                 'apikey' => env('BITTREX_APIKEY', null),
@@ -21,7 +21,7 @@ class WalletsTableSeeder extends Seeder
             'description' => ''
         ]);
         DB::table('wallets')->insert([
-            'name' => 'My Kucoin account',
+            'name' => 'My Kucoin\'s account',
             'handler' => 'KucoinWalletHandler',
             'data' => json_encode([
                 'apikey' => env('KUCOIN_APIKEY', null),
@@ -29,5 +29,51 @@ class WalletsTableSeeder extends Seeder
             ]),
             'description' => ''
         ]);
+        DB::table('wallets')->insert([
+            'name' => 'Gobyte\'s wallet',
+            'handler' => 'GobyteWalletHandler',
+            'data' => json_encode([
+                'address' => env('GOBYTE_WALLET_ADDRESS', null),
+            ]),
+            'description' => ''
+        ]);
+        DB::table('wallets')->insert([
+            'name' => 'Solaris\'s wallet',
+            'handler' => 'SolarisWalletHandler',
+            'data' => json_encode([
+                'address' => env('SOLARIS_WALLET_ADDRESS', null),
+            ]),
+            'description' => ''
+        ]);
+
+        // Pools
+        DB::table('wallets')->insert([
+            'name' => 'Unimining.ca pool (GBX)',
+            'handler' => 'UniminingWalletHandler',
+            'data' => json_encode([
+                'address' => env('GOBYTE_WALLET_ADDRESS', null),
+            ]),
+            'description' => ''
+        ]);
+        DB::table('wallets')->insert([
+            'name' => 'Unimining.ca pool (DSR)',
+            'handler' => 'UniminingWalletHandler',
+            'data' => json_encode([
+                'address' => env('DESIRE_WALLET_ADDRESS', null),
+            ]),
+            'description' => ''
+        ]);
+
+        // Coinsmarkets API down
+        // DB::table('wallets')->insert([
+        //     'name' => 'My Coinsmarkets\'s account',
+        //     'handler' => 'CoinsmarketsWalletHandler',
+        //     'data' => json_encode([
+        //         'username' => env('COINSMARKETS_USERNAME', null),
+        //         'password' => env('COINSMARKETS_PASSWORD', null),
+        //         'pin' => env('COINSMARKETS_PIN', null),
+        //     ]),
+        //     'description' => ''
+        // ]);
     }
 }
