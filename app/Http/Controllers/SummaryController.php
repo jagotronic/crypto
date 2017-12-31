@@ -15,7 +15,7 @@ class SummaryController extends Controller
     {
         CurrenciesUpdater::updateAll();
         $response = WalletsUpdater::updateAll();
-        $response = [];
+        // $response = [];
         $currencies = $this->fetchCurrencies();
         $balances = $this->fetchBalances($currencies);
         $totals = $this->computeTotals($balances);

@@ -63,6 +63,14 @@ class WalletsTableSeeder extends Seeder
             ]),
             'description' => ''
         ]);
+        DB::table('wallets')->insert([
+            'name' => 'Cryptohub pool (all type)',
+            'handler' => 'CryptohubWalletHandler',
+            'data' => json_encode([
+                'read_key' => env('CRYPTOHUB_READ_KEY', null),
+            ]),
+            'description' => ''
+        ]);
 
         // Coinsmarkets API down
         // DB::table('wallets')->insert([

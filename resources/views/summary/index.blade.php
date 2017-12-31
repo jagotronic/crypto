@@ -85,6 +85,7 @@
 @endforeach
     </div>
 </div>
+<pre>{{  print_r($response) }}</pre>
 @endsection
 @section('scripts')
 <script>
