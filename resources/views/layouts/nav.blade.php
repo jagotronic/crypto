@@ -16,6 +16,7 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
+                        <li><a href="/summary">Summary</a></li>
                         <li><a href="/currencies">Currencies</a></li>
                         <li><a href="/wallets">Wallets</a></li>
                         <li><a href="/gpus">GPUs</a></li>

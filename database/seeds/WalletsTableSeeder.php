@@ -71,6 +71,23 @@ class WalletsTableSeeder extends Seeder
             ]),
             'description' => ''
         ]);
+        DB::table('wallets')->insert([
+            'name' => 'zec.nanopool.org (ZEC)',
+            'handler' => 'ZecNanopoolWalletHandler',
+            'data' => json_encode([
+                'address' => env('ZEC_NANOPOOL_WALLET_ADDRESS', null),
+            ]),
+            'description' => ''
+        ]);
+        DB::table('wallets')->insert([
+            'name' => 'mercatox (ETH) tmp',
+            'handler' => 'ManualWalletHandler',
+            'data' => json_encode([
+                'value' => 0.43887129,
+                'currency' => 'ETH'
+            ]),
+            'description' => ''
+        ]);
 
         // Coinsmarkets API down
         // DB::table('wallets')->insert([
