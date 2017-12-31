@@ -96,6 +96,14 @@ class WalletsTableSeeder extends Seeder
             ]),
             'description' => ''
         ]);
+        DB::table('wallets')->insert([
+            'name' => 'Desire wallet (DSR)',
+            'handler' => 'DesireWalletHandler',
+            'data' => json_encode([
+                'address' => env('DESIRE_WALLET_ADDRESS', null),
+            ]),
+            'description' => ''
+        ]);
 
         // Coinsmarkets API down
         // DB::table('wallets')->insert([
