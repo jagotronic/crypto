@@ -13,7 +13,7 @@ class WalletsTableSeeder extends Seeder
     {
         // EXCHANGES
         DB::table('wallets')->insert([
-            'name' => 'My Bittrex\'s account',
+            'name' => 'My Bittrex account',
             'handler' => 'BittrexWalletHandler',
             'data' => json_encode([
                 'apikey' => env('BITTREX_APIKEY', null),
@@ -22,7 +22,7 @@ class WalletsTableSeeder extends Seeder
             'description' => ''
         ]);
         DB::table('wallets')->insert([
-            'name' => 'My Kucoin\'s account',
+            'name' => 'My Kucoin account',
             'handler' => 'KucoinWalletHandler',
             'data' => json_encode([
                 'apikey' => env('KUCOIN_APIKEY', null),
@@ -30,9 +30,18 @@ class WalletsTableSeeder extends Seeder
             ]),
             'description' => ''
         ]);
+        DB::table('wallets')->insert([
+            'name' => 'My yobit account',
+            'handler' => 'YobitWalletHandler',
+            'data' => json_encode([
+                'apikey' => env('YOBIT_APIKEY', null),
+                'apisecret' => env('YOBIT_APISECRET', null),
+            ]),
+            'description' => ''
+        ]);
         // Coinsmarkets API down
         // DB::table('wallets')->insert([
-        //     'name' => 'My Coinsmarkets\'s account',
+        //     'name' => 'My Coinsmarkets account',
         //     'handler' => 'CoinsmarketsWalletHandler',
         //     'data' => json_encode([
         //         'username' => env('COINSMARKETS_USERNAME', null),
@@ -44,7 +53,7 @@ class WalletsTableSeeder extends Seeder
 
         // WALLETS
         DB::table('wallets')->insert([
-            'name' => 'Gobyte\'s wallet',
+            'name' => 'Gobyte wallet',
             'handler' => 'GobyteWalletHandler',
             'data' => json_encode([
                 'address' => env('GOBYTE_WALLET_ADDRESS', null),
@@ -52,7 +61,7 @@ class WalletsTableSeeder extends Seeder
             'description' => ''
         ]);
         DB::table('wallets')->insert([
-            'name' => 'Solaris\'s wallet',
+            'name' => 'Solaris wallet',
             'handler' => 'SolarisWalletHandler',
             'data' => json_encode([
                 'address' => env('SOLARIS_WALLET_ADDRESS', null),
