@@ -11,6 +11,7 @@ class WalletsTableSeeder extends Seeder
      */
     public function run()
     {
+        // EXCHANGES
         DB::table('wallets')->insert([
             'name' => 'My Bittrex\'s account',
             'handler' => 'BittrexWalletHandler',
@@ -29,6 +30,19 @@ class WalletsTableSeeder extends Seeder
             ]),
             'description' => ''
         ]);
+        // Coinsmarkets API down
+        // DB::table('wallets')->insert([
+        //     'name' => 'My Coinsmarkets\'s account',
+        //     'handler' => 'CoinsmarketsWalletHandler',
+        //     'data' => json_encode([
+        //         'username' => env('COINSMARKETS_USERNAME', null),
+        //         'password' => env('COINSMARKETS_PASSWORD', null),
+        //         'pin' => env('COINSMARKETS_PIN', null),
+        //     ]),
+        //     'description' => ''
+        // ]);
+
+        // WALLETS
         DB::table('wallets')->insert([
             'name' => 'Gobyte\'s wallet',
             'handler' => 'GobyteWalletHandler',
@@ -42,6 +56,22 @@ class WalletsTableSeeder extends Seeder
             'handler' => 'SolarisWalletHandler',
             'data' => json_encode([
                 'address' => env('SOLARIS_WALLET_ADDRESS', null),
+            ]),
+            'description' => ''
+        ]);
+        DB::table('wallets')->insert([
+            'name' => 'zCash Jaxx wallet (ZEC)',
+            'handler' => 'ZcashWalletHandler',
+            'data' => json_encode([
+                'address' => env('ZCASH_WALLET_ADDRESS', null),
+            ]),
+            'description' => ''
+        ]);
+        DB::table('wallets')->insert([
+            'name' => 'Desire wallet (DSR)',
+            'handler' => 'DesireWalletHandler',
+            'data' => json_encode([
+                'address' => env('DESIRE_WALLET_ADDRESS', null),
             ]),
             'description' => ''
         ]);
@@ -79,6 +109,9 @@ class WalletsTableSeeder extends Seeder
             ]),
             'description' => ''
         ]);
+
+
+        // MANUAL
         DB::table('wallets')->insert([
             'name' => 'mercatox (ETH) tmp',
             'handler' => 'ManualWalletHandler',
@@ -88,33 +121,6 @@ class WalletsTableSeeder extends Seeder
             ]),
             'description' => ''
         ]);
-        DB::table('wallets')->insert([
-            'name' => 'zCash Jaxx wallet (ZEC)',
-            'handler' => 'ZcashWalletHandler',
-            'data' => json_encode([
-                'address' => env('ZCASH_WALLET_ADDRESS', null),
-            ]),
-            'description' => ''
-        ]);
-        DB::table('wallets')->insert([
-            'name' => 'Desire wallet (DSR)',
-            'handler' => 'DesireWalletHandler',
-            'data' => json_encode([
-                'address' => env('DESIRE_WALLET_ADDRESS', null),
-            ]),
-            'description' => ''
-        ]);
 
-        // Coinsmarkets API down
-        // DB::table('wallets')->insert([
-        //     'name' => 'My Coinsmarkets\'s account',
-        //     'handler' => 'CoinsmarketsWalletHandler',
-        //     'data' => json_encode([
-        //         'username' => env('COINSMARKETS_USERNAME', null),
-        //         'password' => env('COINSMARKETS_PASSWORD', null),
-        //         'pin' => env('COINSMARKETS_PIN', null),
-        //     ]),
-        //     'description' => ''
-        // ]);
     }
 }
