@@ -29,9 +29,6 @@ Route::group(['middleware' => ['auth']], function($router) {
 	]);
 
 	Route::get('/home', 'HomeController@index')->name('home');
-
-	Route::get('/summary', function() {
-		App\Helpers\WalletsUpdater::updateAll();
-	})->name('summary');
+	Route::get('/summary', 'SummaryController@index')->name('summary');
 });
 

@@ -1,0 +1,78 @@
+
+.Summary {
+	@extend .container-fluid;
+
+	display: flex;
+}
+
+.Summary-currencies {
+	max-width: 200px;
+
+	flex: 0 0 auto;
+
+	.card {
+		margin-bottom: 15px;
+		background-color: $gray-lighter;
+		color: $text-color;
+
+		.card-body {
+			padding-top: 5px;
+		}
+		&:hover {
+			background-color: $gray-light;
+		}
+	}
+
+	h5 { 
+		margin-top: 0;
+		text-align: center;
+		font-weight: 700;
+	}
+
+	img {
+		width: 100%;
+		max-width: 32px;
+		margin: 0 auto;
+		margin: 10px auto 5px;
+	}
+}
+
+.Summary-balances {
+	margin-right: 15px;
+
+	flex: 1 1 auto;
+	
+	table { text-align: right; }
+
+	th { text-align: right; }
+
+	td.name {
+		background-color: $gray-lighter;
+		text-align: left;
+		border-bottom-style: solid !important;
+	}
+
+	.total {
+		border-bottom: 1px solid $gray-light !important;
+		border-top: 4px double $gray-light;
+	}
+
+	.panel-body { border-top: none !important; }
+}
+
+.Summary-totals {
+    font-size: 1.5em;
+
+	.superTotal {
+		padding: 0;
+	}
+
+	.card {
+		border-right: none;
+		border-top: none;
+		background-color: $gray-lighter;
+	    margin-top: -2px;
+	    border-radius: 0;
+	    border-left-style: dashed;
+	}
+}
