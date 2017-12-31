@@ -11911,6 +11911,10 @@ input:focus,
   border-bottom-style: solid !important;
 }
 
+.Summary-balanceTable td.value {
+  text-align: right;
+}
+
 .Summary-balanceTable .total {
   border-bottom: 1px solid #DFD7CA !important;
   border-top: 4px double #DFD7CA;

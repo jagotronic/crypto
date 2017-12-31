@@ -73,6 +73,10 @@
 		border-bottom-style: solid !important;
 	}
 
+	td.value {
+		text-align: right;
+	}
+
 	.total {
 		border-bottom: 1px solid $gray-light !important;
 		border-top: 4px double $gray-light;

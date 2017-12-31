@@ -61,10 +61,10 @@
 @foreach($currency_balances['balances'] as $balance)
                     <tr>
                         <td class="name">{{ $balance['wallet'] }}</td>
-                        <td>{{ sprintf('%s', number_format($balance['value'], 5)) }}</td>
-                        <td{{ (!empty($balance['error']) ? ' class=danger' : '') }}>{{ !empty($balance['error']) ? $balance['error'] : sprintf('$ %s', number_format($balance['values']['USD'], 3)) }}</td>
-                        <td{{ (!empty($balance['error']) ? ' class=danger' : '') }}>{{ !empty($balance['error']) ? $balance['error'] : sprintf('$ %s', number_format($balance['values']['CAD'], 3)) }}</td>
-                        <td{{ (!empty($balance['error']) ? ' class=danger' : '') }}>{{ !empty($balance['error']) ? $balance['error'] : sprintf('%s', number_format($balance['values']['BTC'], 7)) }}</td>
+                        <td class="value">{{ sprintf('%s', number_format($balance['value'], 5)) }}</td>
+                        <td class="value{{ (!empty($balance['error']) ? ' danger' : '') }}">{{ !empty($balance['error']) ? $balance['error'] : sprintf('$ %s', number_format($balance['values']['USD'], 3)) }}</td>
+                        <td class="value{{ (!empty($balance['error']) ? ' danger' : '') }}">{{ !empty($balance['error']) ? $balance['error'] : sprintf('$ %s', number_format($balance['values']['CAD'], 3)) }}</td>
+                        <td class="value{{ (!empty($balance['error']) ? ' danger' : '') }}">{{ !empty($balance['error']) ? $balance['error'] : sprintf('%s', number_format($balance['values']['BTC'], 7)) }}</td>
                     </tr>
 @endforeach
                 </tbody>
