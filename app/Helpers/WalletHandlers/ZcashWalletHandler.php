@@ -4,37 +4,35 @@ namespace App\Helpers\WalletHandlers;
 use App\Wallet;
 use App\Balance;
 
-class SolarisWalletHandler extends WalletHandler {
+class ZcashWalletHandler extends WalletHandler {
 
-	public $name = 'Solaris wallet';
+	public $name = 'Zcash wallet';
 	protected $fields = [
         'address' => 'text',
 	];
     public $validation = [
-        'address' => 'required|string|min:34|max:34',
+        'address' => 'required|string|min:35|max:35',
     ];
 
 	public function handle (Wallet $wallet)
 	{
 		$address = $wallet->raw_data['address'];
-		$uri = 'https://solaris.blockexplorer.pro/ext/getbalance/'. $address;
+		$uri = 'https://api.zcha.in/v2/mainnet/accounts/'. $address;
 
 		$ch = curl_init($uri);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		$execResult = curl_exec($ch);
 		curl_close($ch);
 
-		if ($execResult === false) {
-			throw new \Exception('SERVER NOT RESPONDING');
+		$json = json_decode($execResult);
+
+		if (is_null($json)) {
+			throw new \Exception('SERVER NOT RESPONDING OR INVALID ADDRESS');
 		}
 
-		$value = json_decode($execResult);
-		$symbol = 'XLR';
+		$symbol = 'ZEC';
 		$balance = $wallet->balancesOfSymbol($symbol);
-
-		if (!is_numeric($value) || empty($value)) {
-			$value = 0;
-		}
+		$value = $json->balance;
 
 		if (is_null($balance)) {
 

@@ -75,7 +75,7 @@ class WalletsTableSeeder extends Seeder
             'name' => 'zec.nanopool.org (ZEC)',
             'handler' => 'ZecNanopoolWalletHandler',
             'data' => json_encode([
-                'address' => env('ZEC_NANOPOOL_WALLET_ADDRESS', null),
+                'address' => env('ZCASH_WALLET_ADDRESS', null),
             ]),
             'description' => ''
         ]);
@@ -85,6 +85,14 @@ class WalletsTableSeeder extends Seeder
             'data' => json_encode([
                 'value' => 0.43887129,
                 'currency' => 'ETH'
+            ]),
+            'description' => ''
+        ]);
+        DB::table('wallets')->insert([
+            'name' => 'zCash Jaxx wallet (ZEC)',
+            'handler' => 'ZcashWalletHandler',
+            'data' => json_encode([
+                'address' => env('ZCASH_WALLET_ADDRESS', null),
             ]),
             'description' => ''
         ]);
