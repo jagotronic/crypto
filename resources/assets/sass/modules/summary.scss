@@ -42,21 +42,6 @@
 
 	flex: 1 1 auto;
 	
-	table { text-align: right; }
-
-	th { text-align: right; }
-
-	td.name {
-		background-color: $gray-lighter;
-		text-align: left;
-		border-bottom-style: solid !important;
-	}
-
-	.total {
-		border-bottom: 1px solid $gray-light !important;
-		border-top: 4px double $gray-light;
-	}
-
 	.panel-body { border-top: none !important; }
 }
 
@@ -74,5 +59,32 @@
 	    margin-top: -2px;
 	    border-radius: 0;
 	    border-left-style: dashed;
+	}
+}
+
+.Summary-balanceTable {
+	table { text-align: right; }
+
+	th { text-align: right; }
+
+	td.name {
+		background-color: $gray-lighter;
+		text-align: left;
+		border-bottom-style: solid !important;
+	}
+
+	.total {
+		border-bottom: 1px solid $gray-light !important;
+		border-top: 4px double $gray-light;
+	}
+}
+
+.Summary-balanceTitle {
+	padding-bottom: 0;
+
+	img {
+		max-width: 36px;
+    	vertical-align: bottom;
+    	margin-right: 15px;
 	}
 }

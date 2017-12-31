@@ -11876,25 +11876,6 @@ input:focus,
           flex: 1 1 auto;
 }
 
-.Summary-balances table {
-  text-align: right;
-}
-
-.Summary-balances th {
-  text-align: right;
-}
-
-.Summary-balances td.name {
-  background-color: #F8F5F0;
-  text-align: left;
-  border-bottom-style: solid !important;
-}
-
-.Summary-balances .total {
-  border-bottom: 1px solid #DFD7CA !important;
-  border-top: 4px double #DFD7CA;
-}
-
 .Summary-balances .panel-body {
   border-top: none !important;
 }
@@ -11914,5 +11895,34 @@ input:focus,
   margin-top: -2px;
   border-radius: 0;
   border-left-style: dashed;
+}
+
+.Summary-balanceTable table {
+  text-align: right;
+}
+
+.Summary-balanceTable th {
+  text-align: right;
+}
+
+.Summary-balanceTable td.name {
+  background-color: #F8F5F0;
+  text-align: left;
+  border-bottom-style: solid !important;
+}
+
+.Summary-balanceTable .total {
+  border-bottom: 1px solid #DFD7CA !important;
+  border-top: 4px double #DFD7CA;
+}
+
+.Summary-balanceTitle {
+  padding-bottom: 0;
+}
+
+.Summary-balanceTitle img {
+  max-width: 36px;
+  vertical-align: bottom;
+  margin-right: 15px;
 }
 

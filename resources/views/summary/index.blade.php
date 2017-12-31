@@ -33,11 +33,14 @@
                 </tbody>
             </table>
 @foreach($balances as $symbol => $currency_balances)
-            <div class="panel-body">
-                <h2>{{ $symbol }}</h2>
+            <div class="panel-body Summary-balanceTitle">
+                <h2>
+                    <img src="https://digitalcoinprice.com/application/modules/assets/images/coins/64x64/{{ $currencies[$symbol]['api_path'] }}.png" alt="{{ $currencies[$symbol]['name'] }}">
+                    {{ $currencies[$symbol]['name'] }} ({{ $symbol }})
+                </h2>
             </div>
             <!-- Table -->
-            <table class="table table-condensed table-bordered">
+            <table class="table table-condensed table-bordered Summary-balanceTable">
                 <colgroup>
                     <col width="" />
                     <col width="150px" />
