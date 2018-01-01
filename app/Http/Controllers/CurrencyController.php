@@ -113,7 +113,7 @@ class CurrencyController extends Controller
     }
 
     public function refresh() {
-        CurrenciesUpdater::updateAll();
+        return CurrenciesUpdater::updateAll();
     }
 
     /**

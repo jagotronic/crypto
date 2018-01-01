@@ -15,6 +15,7 @@ class WalletsUpdater {
 				'wallet' => $wallet->name,
 				'id' => $wallet->id,
 			];
+
 			try {
 				WalletsUpdater::update($wallet);
 				$status['success'] = true;
