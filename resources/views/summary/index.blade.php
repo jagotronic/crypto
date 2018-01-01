@@ -8,10 +8,10 @@
             <table class="table table-condensed">
                 <colgroup>
                     <col width="" />
-                    <col width="150px" />
-                    <col width="150px" />
-                    <col width="150px" />
-                    <col width="150px" />
+                    <col width="15%" />
+                    <col width="15%" />
+                    <col width="15%" />
+                    <col width="15%" />
                 </colgroup>
                 <tbody>
                     <tr class="Summary-totals">
@@ -43,10 +43,10 @@
             <table class="table table-condensed table-bordered Summary-balanceTable">
                 <colgroup>
                     <col width="" />
-                    <col width="150px" />
-                    <col width="150px" />
-                    <col width="150px" />
-                    <col width="150px" />
+                    <col width="15%" />
+                    <col width="15%" />
+                    <col width="15%" />
+                    <col width="15%" />
                 </colgroup>
                 <tfoot>
                     <tr>
