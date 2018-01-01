@@ -3,16 +3,16 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Jobs\FetchCurrencies as FetchCurrenciesJob;
+use App\Jobs\UpdateCurrencies as UpdateCurrenciesJob;
 
-class FetchCurrencies extends Command
+class UpdateCurrencies extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'currencies:fetch';
+    protected $signature = 'currencies:update';
 
     /**
      * The console command description.
@@ -38,7 +38,7 @@ class FetchCurrencies extends Command
      */
     public function handle()
     {
-        $this->info('Starting FetchCurrenciesJob job');
-        FetchCurrenciesJob::dispatch();
+        $this->info('Starting UpdateCurrenciesJob job');
+        UpdateCurrenciesJob::dispatch();
     }
 }

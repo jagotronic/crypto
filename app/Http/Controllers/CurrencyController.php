@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Currency;
 use Illuminate\Http\Request;
-use App\Jobs\FetchCurrencies;
 use App\Helpers\CurrenciesUpdater;
 
 class CurrencyController extends Controller
