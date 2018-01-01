@@ -37,11 +37,6 @@ class SolarisWalletHandler extends WalletHandler {
 		}
 
 		if (is_null($balance)) {
-
-			// if ($value == 0) {
-			// 	return;
-			// }
-
 			$balance = new Balance();
 			$balance->wallet_id = $wallet->id;
 			$balance->symbol = $symbol;

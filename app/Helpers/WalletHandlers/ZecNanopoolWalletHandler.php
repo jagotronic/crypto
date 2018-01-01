@@ -34,16 +34,10 @@ class ZecNanopoolWalletHandler extends WalletHandler {
 		}
 
 		$symbol = 'ZEC';
-		/** @var App\Balance */
 		$balance = $wallet->balancesOfSymbol($symbol);
 		$value = (float)$json->data->unconfirmed_balance += (float)$json->data->balance;
 
 		if (is_null($balance)) {
-
-			// if ($value == 0) {
-			// 	return;
-			// }
-
 			$balance = new Balance();
 			$balance->wallet_id = $wallet->id;
 			$balance->symbol = $symbol;

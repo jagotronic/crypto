@@ -18,13 +18,41 @@ class KucoinWalletHandler extends WalletHandler {
 
 	public function handle (Wallet $wallet)
 	{
+		$response = self::getBalances($wallet);
+
+		foreach ($response->data as $KucoinBalance) {
+			$balance = $wallet->balancesOfSymbol($KucoinBalance->coinType);
+			$value = $KucoinBalance->balance + $KucoinBalance->freezeBalance;
+
+			if (is_null($balance)) {
+
+				if ($value == 0) {
+					continue;
+				}
+
+				$balance = new Balance();
+				$balance->wallet_id = $wallet->id;
+				$balance->symbol = $KucoinBalance->coinType;
+			}
+
+			$balance->value = $value;
+			$balance->save();
+		}
+	}
+
+	private function getBalances(Wallet $wallet)
+	{
+		return self::apiCall($wallet, '/v1/account/balance');
+	}
+
+	private function apiCall(Wallet $wallet, $endpoint, $querystring = '')
+	{
 		$ku_key = $wallet->raw_data['apikey'];
 		$ku_secret = $wallet->raw_data['apisecret'];
 
 		$host = 'https://api.kucoin.com';
 
 		$nonce = round(microtime(true) * 1000);
-		$endpoint = '/v1/account/balance';
 		$querystring = '';
 		$signstring = $endpoint.'/'.$nonce.'/'.$querystring;
 		$hash = hash_hmac('sha256',  base64_encode($signstring) , $ku_secret);
@@ -60,22 +88,6 @@ class KucoinWalletHandler extends WalletHandler {
 			throw new \Exception($json->error);
 		}
 
-		foreach ($json->data as $JsonBalance) {
-			$balance = $wallet->balancesOfSymbol($JsonBalance->coinType);
-
-			if (is_null($balance)) {
-
-				if ($JsonBalance->balance == 0) {
-					continue;
-				}
-
-				$balance = new Balance();
-				$balance->wallet_id = $wallet->id;
-				$balance->symbol = $JsonBalance->coinType;
-			}
-
-			$balance->value = $JsonBalance->balance;
-			$balance->save();
-		}
+		return $json;
 	}
 }

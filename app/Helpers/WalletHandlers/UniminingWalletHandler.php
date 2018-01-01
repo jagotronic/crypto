@@ -32,15 +32,14 @@ class UniminingWalletHandler extends WalletHandler {
 		$json = json_decode($execResult);
 
 		$symbol = $json->currency;
-		/** @var App\Balance */
 		$balance = $wallet->balancesOfSymbol($symbol);
 		$value = $json->unpaid;
 
 		if (is_null($balance)) {
 
-			// if ($value == 0) {
-			// 	return;
-			// }
+			if ($value == 0) {
+				return;
+			}
 
 			$balance = new Balance();
 			$balance->wallet_id = $wallet->id;
