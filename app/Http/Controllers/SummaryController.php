@@ -35,8 +35,9 @@ class SummaryController extends Controller
 
         foreach (Currency::all() as $currency) {
             $currencies[$currency->symbol] = array_only($currency->toArray(), [
-                "name", "symbol", "api_path",
-                "usd_value", "cad_value", "btc_value",
+                'name', 'symbol', 'api_path',
+                'usd_value', 'cad_value', 'btc_value',
+                'percent_change_1h', 'percent_change_24h', 'percent_change_7d'
             ]);
         }
 
