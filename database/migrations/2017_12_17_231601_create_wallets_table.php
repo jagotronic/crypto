@@ -19,6 +19,7 @@ class CreateWalletsTable extends Migration
             $table->string('handler');
             $table->text('description');
             $table->text('data');
+            $table->text('message')->nullable();
             $table->timestamps();
         });
     }

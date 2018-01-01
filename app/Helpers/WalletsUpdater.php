@@ -16,15 +16,18 @@ class WalletsUpdater {
 				'id' => $wallet->id,
 			];
 
+			$wallet->message = null;
+
 			try {
 				WalletsUpdater::update($wallet);
 				$status['success'] = true;
 			} catch (\Exception $e) {
 				$status['success'] = false;
-				$status['message'] = $wallet->name . ' -- ' . $e->getMessage();
+				$status['message'] = $wallet->message = ($wallet->name . ' -- ' . $e->getMessage());
 				$status['trace'] = $e->getTraceAsString();
 			}
 
+			$wallet->save();
 			$response[] = $status;
 		}
 
