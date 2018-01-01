@@ -38,7 +38,7 @@ class UpdateWallets extends Command
      */
     public function handle()
     {
-        $this->info('Starting UpdateWalletsJob job');
+        $this->info('Starting UpdateWallets job');
         UpdateWalletsJob::dispatch();
     }
 }

@@ -38,7 +38,7 @@ class UpdateCurrencies extends Command
      */
     public function handle()
     {
-        $this->info('Starting UpdateCurrenciesJob job');
+        $this->info('Starting UpdateCurrencies job');
         UpdateCurrenciesJob::dispatch();
     }
 }
