@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Currency;
 use Illuminate\Http\Request;
-use App\Jobs\FetchCurrencies;
 use App\Helpers\CurrenciesUpdater;
 
 class CurrencyController extends Controller
@@ -113,7 +112,7 @@ class CurrencyController extends Controller
     }
 
     public function refresh() {
-        CurrenciesUpdater::updateAll();
+        return CurrenciesUpdater::updateAll();
     }
 
     /**

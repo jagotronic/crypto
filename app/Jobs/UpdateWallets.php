@@ -7,8 +7,9 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use App\Helpers\WalletsUpdater;
 
-class FetchCurrencies implements ShouldQueue
+class UpdateWallets implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -29,7 +30,6 @@ class FetchCurrencies implements ShouldQueue
      */
     public function handle()
     {
-        date_default_timezone_set('America/Montreal');
-        file_put_contents('monfichier.txt', date('Y-m-d H:i:s'));
+        WalletsUpdater::updateAll();
     }
 }

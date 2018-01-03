@@ -43,6 +43,11 @@ class BittrexWalletHandler extends WalletHandler {
 			$balance = $wallet->balancesOfSymbol($JsonBalance->Currency);
 
 			if (is_null($balance)) {
+
+				if ($JsonBalance->Balance == 0) {
+					continue;
+				}
+
 				$balance = new Balance();
 				$balance->wallet_id = $wallet->id;
 				$balance->symbol = $JsonBalance->Currency;

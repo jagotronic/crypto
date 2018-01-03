@@ -8,10 +8,10 @@
             <table class="table table-condensed">
                 <colgroup>
                     <col width="" />
-                    <col width="150px" />
-                    <col width="150px" />
-                    <col width="150px" />
-                    <col width="150px" />
+                    <col width="15%" />
+                    <col width="15%" />
+                    <col width="15%" />
+                    <col width="15%" />
                 </colgroup>
                 <tbody>
                     <tr class="Summary-totals">
@@ -43,10 +43,10 @@
             <table class="table table-condensed table-bordered Summary-balanceTable">
                 <colgroup>
                     <col width="" />
-                    <col width="150px" />
-                    <col width="150px" />
-                    <col width="150px" />
-                    <col width="150px" />
+                    <col width="15%" />
+                    <col width="15%" />
+                    <col width="15%" />
+                    <col width="15%" />
                 </colgroup>
                 <tfoot>
                     <tr>
@@ -83,6 +83,23 @@
                 <strong>CAD</strong>: {{ sprintf('$ %s', number_format($currency['cad_value'], 3)) }} <br>
                 <strong>BTC</strong>: {{ $currency['btc_value'] }}
             </p>
+            <div class="Summary-currencyPercentRow">
+                <div class="Summary-currencyPercentCol{{ $currency['percent_change_1h'] < 0 ? ' minus' : '' }}">
+                    <i class="Summary-currencyArrow"></i>
+                    1h <br>
+                    {{ sprintf('%s', number_format($currency['percent_change_1h'], 2)) }}%
+                </div>
+                <div class="Summary-currencyPercentCol{{ $currency['percent_change_24h'] < 0 ? ' minus' : '' }}">
+                    <i class="Summary-currencyArrow"></i>
+                    24h <br>
+                    {{ sprintf('%s', number_format($currency['percent_change_24h'], 2)) }}%
+                </div>
+                <div class="Summary-currencyPercentCol{{ $currency['percent_change_7d'] < 0 ? ' minus' : '' }}">
+                    <i class="Summary-currencyArrow"></i>
+                    7d <br>
+                    {{ sprintf('%s', number_format($currency['percent_change_7d'], 2)) }}%
+                </div>
+            </div>
           </div>
         </a>
 @endforeach

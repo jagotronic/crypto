@@ -6,7 +6,7 @@
 }
 
 .Summary-currencies {
-	max-width: 200px;
+	max-width: 300px;
 
 	flex: 0 0 auto;
 
@@ -27,6 +27,8 @@
 		margin-top: 0;
 		text-align: center;
 		font-weight: 700;
+		border-bottom: 1px solid $gray-light;
+    	padding-bottom: 5px;
 	}
 
 	img {
@@ -92,3 +94,33 @@
     	margin-right: 15px;
 	}
 }
+
+.Summary-currencyPercentRow {
+	border-top: 1px solid $gray-light;
+	white-space: nowrap;
+
+	display: flex;
+}
+
+.Summary-currencyPercentCol {
+	width: 33%;
+	text-align: center;
+	padding: 5px 5px 0;
+
+	flex: 1 1 auto;
+}
+
+.Summary-currencyArrow {
+	@extend .fa;
+	@extend .fa-arrow-up;
+
+	color: #0ca202;
+
+	.minus & {
+		color: red;
+	}
+	.minus &:before {
+    	content: "\f063";
+	}
+}
+

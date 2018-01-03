@@ -32,17 +32,11 @@ class DesireWalletHandler extends WalletHandler {
 			throw new \Exception('Invalid html for : ' . $uri);
 		}
 
-
 		$symbol = 'DSR';
 		$balance = $wallet->balancesOfSymbol($symbol);
 		$value = (float)trim($balanceTd->html());
 
 		if (is_null($balance)) {
-
-			// if ($value == 0) {
-			// 	return;
-			// }
-
 			$balance = new Balance();
 			$balance->wallet_id = $wallet->id;
 			$balance->symbol = $symbol;

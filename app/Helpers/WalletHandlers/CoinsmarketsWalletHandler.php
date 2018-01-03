@@ -39,7 +39,9 @@ throw new \Exception('Coinsmarkets API disabled');
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 		$output = curl_exec($ch);
 
-
+/**
+ * @todo need API access to continue
+ */
 dd($output);
 
 
