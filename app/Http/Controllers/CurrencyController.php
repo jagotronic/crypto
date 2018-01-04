@@ -42,6 +42,7 @@ class CurrencyController extends Controller
         $currency = new Currency();
         $currency->name = request('name');
         $currency->symbol = request('symbol');
+        $currency->api_path = request('api_path');
         $currency->usd_value = request('usd_value', null);
         $currency->cad_value = request('cad_value', null);
         $currency->btc_value = request('btc_value', null);
@@ -87,6 +88,7 @@ class CurrencyController extends Controller
 
         $currency->name = request('name');
         $currency->symbol = request('symbol');
+        $currency->api_path = request('api_path');
         $currency->usd_value = request('usd_value', null);
         $currency->cad_value = request('cad_value', null);
         $currency->btc_value = request('btc_value', null);
@@ -125,6 +127,7 @@ class CurrencyController extends Controller
         $request->validate([
             'name' => 'required|string|max:191|unique:currencies,name,'.$request->get('id'),
             'symbol' => 'required|string|max:191|unique:currencies,symbol,'.$request->get('id'),
+            'api_path' => 'required|string|max:191|unique:currencies,api_path,'.$request->get('id'),
             'usd_value' => 'nullable|regex:/[\d]{0,8}.[\d]{0,8}/',
             'cad_value' => 'nullable|regex:/[\d]{0,8}.[\d]{0,8}/',
             'btc_value' => 'nullable|regex:/[\d]{0,8}.[\d]{0,8}/'
