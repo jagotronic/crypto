@@ -13,8 +13,8 @@ class SummaryController extends Controller
     
     public function index()
     {
-         CurrenciesUpdater::updateAll();
-         $response = WalletsUpdater::updateAll();
+        CurrenciesUpdater::updateAll();
+        $response = WalletsUpdater::updateAll();
 //        $response = [];
         $currencies = $this->fetchCurrencies();
         $balances = $this->fetchBalances($currencies);
