@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Helpers\WalletHandlers;
+namespace App\Services\Wallets;
+
 use App\Wallet;
 use App\Balance;
 
-class CryptopiaWalletHandler extends WalletHandler {
+class CryptopiaExchange extends WalletService {
 
 	public $name = 'Cryptopia';
 	protected $fields = [

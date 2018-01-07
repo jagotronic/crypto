@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Helpers\WalletHandlers;
+namespace App\Services\Wallets;
+
 use App\Wallet;
 use App\Balance;
 
-class CryptohubWalletHandler extends WalletHandler {
+class CryptohubPool extends WalletService {
 
-	public $name = 'Cryptohub';
+	public $name = 'Cryptohub pool';
 	protected $fields = [
         'read_key' => 'text',
 	];

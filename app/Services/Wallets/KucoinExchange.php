@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Helpers\WalletHandlers;
+namespace App\Services\Wallets;
+
 use App\Wallet;
 use App\Balance;
 
-class KucoinWalletHandler extends WalletHandler {
+class KucoinExchange extends WalletService {
 
 	public $name = 'Kucoin';
 	protected $fields = [

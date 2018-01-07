@@ -1,24 +1,24 @@
 <?php
 
-namespace App\Helpers\WalletHandlers;
+namespace App\Services\Wallets;
+
 use App\Wallet;
 use App\Balance;
 
-class EthereumWalletHandler extends WalletHandler {
+class EthereumWallet extends WalletService {
 
-	public $name = 'Ethereum wallet';
-	protected $fields = [
+    public $name = 'Ethereum wallet';
+    protected $fields = [
         'address' => 'text',
-	];
+    ];
     public $validation = [
         'address' => 'required|string|min:42|max:42',
     ];
 
-	public function handle (Wallet $wallet)
-	{
-		$address = $wallet->raw_data['address'];
-		$uri = 'https://api.etherscan.io/api?module=account&action=balance&address='. $address .'&tag=latest'; //&apikey=YourApiKeyToken
-
+    public function handle (Wallet $wallet)
+    {
+        $address = $wallet->raw_data['address'];
+        $uri = 'https://api.etherscan.io/api?module=account&action=balance&address='. $address .'&tag=latest'; //&apikey=YourApiKeyToken
 
         $ch = curl_init($uri);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -46,5 +46,5 @@ class EthereumWalletHandler extends WalletHandler {
 
         $balance->value = $value;
         $balance->save();
-	}
+    }
 }

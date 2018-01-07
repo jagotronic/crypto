@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Helpers\WalletHandlers;
+namespace App\Services\Wallets;
+
 use App\Wallet;
 use App\Currency;
 
-abstract class WalletHandler {
+abstract class WalletService {
 
 	public $name = '';
 
