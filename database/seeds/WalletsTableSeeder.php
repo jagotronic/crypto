@@ -14,7 +14,7 @@ class WalletsTableSeeder extends Seeder
         // EXCHANGES
         DB::table('wallets')->insert([
             'name' => 'My Bittrex account',
-            'handler' => 'BittrexWalletHandler',
+            'handler' => 'BittrexExchange',
             'data' => json_encode([
                 'apikey' => env('BITTREX_APIKEY', null),
                 'apisecret' => env('BITTREX_APISECRET', null),
@@ -23,7 +23,7 @@ class WalletsTableSeeder extends Seeder
         ]);
         DB::table('wallets')->insert([
             'name' => 'My Kucoin account',
-            'handler' => 'KucoinWalletHandler',
+            'handler' => 'KucoinExchange',
             'data' => json_encode([
                 'apikey' => env('KUCOIN_APIKEY', null),
                 'apisecret' => env('KUCOIN_APISECRET', null),
@@ -32,7 +32,7 @@ class WalletsTableSeeder extends Seeder
         ]);
         DB::table('wallets')->insert([
             'name' => 'My yobit account',
-            'handler' => 'YobitWalletHandler',
+            'handler' => 'YobitExchange',
             'data' => json_encode([
                 'apikey' => env('YOBIT_APIKEY', null),
                 'apisecret' => env('YOBIT_APISECRET', null),
@@ -41,7 +41,7 @@ class WalletsTableSeeder extends Seeder
         ]);
         DB::table('wallets')->insert([
             'name' => 'My Cryptopia account',
-            'handler' => 'CryptopiaWalletHandler',
+            'handler' => 'CryptopiaExchange',
             'data' => json_encode([
                 'apikey' => env('CRYPTOPIA_APIKEY', null),
                 'apisecret' => env('CRYPTOPIA_APISECRET', null),
@@ -51,7 +51,7 @@ class WalletsTableSeeder extends Seeder
         // Coinsmarkets API down
         // DB::table('wallets')->insert([
         //     'name' => 'My Coinsmarkets account',
-        //     'handler' => 'CoinsmarketsWalletHandler',
+        //     'handler' => 'CoinsmarketsExchange',
         //     'data' => json_encode([
         //         'username' => env('COINSMARKETS_USERNAME', null),
         //         'password' => env('COINSMARKETS_PASSWORD', null),
@@ -63,7 +63,7 @@ class WalletsTableSeeder extends Seeder
         // WALLETS
         DB::table('wallets')->insert([
             'name' => 'Gobyte wallet',
-            'handler' => 'GobyteWalletHandler',
+            'handler' => 'GobyteWallet',
             'data' => json_encode([
                 'address' => env('GOBYTE_WALLET_ADDRESS', null),
             ]),
@@ -71,7 +71,7 @@ class WalletsTableSeeder extends Seeder
         ]);
         DB::table('wallets')->insert([
             'name' => 'Solaris wallet',
-            'handler' => 'SolarisWalletHandler',
+            'handler' => 'SolarisWallet',
             'data' => json_encode([
                 'address' => env('SOLARIS_WALLET_ADDRESS', null),
             ]),
@@ -79,7 +79,7 @@ class WalletsTableSeeder extends Seeder
         ]);
         DB::table('wallets')->insert([
             'name' => 'zCash Jaxx wallet (ZEC)',
-            'handler' => 'ZcashWalletHandler',
+            'handler' => 'ZcashWallet',
             'data' => json_encode([
                 'address' => env('ZCASH_WALLET_ADDRESS', null),
             ]),
@@ -87,7 +87,7 @@ class WalletsTableSeeder extends Seeder
         ]);
         DB::table('wallets')->insert([
             'name' => 'Desire wallet (DSR)',
-            'handler' => 'DesireWalletHandler',
+            'handler' => 'DesireWallet',
             'data' => json_encode([
                 'address' => env('DESIRE_WALLET_ADDRESS', null),
             ]),
@@ -97,7 +97,7 @@ class WalletsTableSeeder extends Seeder
         // Pools
         DB::table('wallets')->insert([
             'name' => 'Unimining.ca pool (GBX)',
-            'handler' => 'UniminingWalletHandler',
+            'handler' => 'UniminingPool',
             'data' => json_encode([
                 'address' => env('GOBYTE_WALLET_ADDRESS', null),
             ]),
@@ -105,7 +105,7 @@ class WalletsTableSeeder extends Seeder
         ]);
         DB::table('wallets')->insert([
             'name' => 'Unimining.ca pool (DSR)',
-            'handler' => 'UniminingWalletHandler',
+            'handler' => 'UniminingPool',
             'data' => json_encode([
                 'address' => env('DESIRE_WALLET_ADDRESS', null),
             ]),
@@ -113,7 +113,7 @@ class WalletsTableSeeder extends Seeder
         ]);
         DB::table('wallets')->insert([
             'name' => 'Cryptohub pool (all type)',
-            'handler' => 'CryptohubWalletHandler',
+            'handler' => 'CryptohubPool',
             'data' => json_encode([
                 'read_key' => env('CRYPTOHUB_READ_KEY', null),
             ]),
@@ -121,7 +121,7 @@ class WalletsTableSeeder extends Seeder
         ]);
         DB::table('wallets')->insert([
             'name' => 'zec.nanopool.org (ZEC)',
-            'handler' => 'ZecNanopoolWalletHandler',
+            'handler' => 'ZecNanopoolPool',
             'data' => json_encode([
                 'address' => env('ZCASH_WALLET_ADDRESS', null),
             ]),
@@ -129,16 +129,15 @@ class WalletsTableSeeder extends Seeder
         ]);
 
 
-        // MANUAL
+        // Others
         DB::table('wallets')->insert([
             'name' => 'mercatox (ETH) tmp',
-            'handler' => 'ManualWalletHandler',
+            'handler' => 'Manual',
             'data' => json_encode([
-                'value' => 0.43887129,
+                'value' => 0.20887129,
                 'currency' => 'ETH'
             ]),
             'description' => ''
         ]);
-
     }
 }

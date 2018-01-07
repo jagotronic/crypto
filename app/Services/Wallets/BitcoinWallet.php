@@ -1,23 +1,24 @@
 <?php
 
-namespace App\Helpers\WalletHandlers;
+namespace App\Services\Wallets;
+
 use App\Wallet;
 use App\Balance;
 
-class BitcoinWalletHandler extends WalletHandler {
+class BitcoinWallet extends WalletService {
 
-	public $name = 'Bitcoin wallet';
-	protected $fields = [
+    public $name = 'Bitcoin wallet';
+    protected $fields = [
         'address' => 'text',
-	];
+    ];
     public $validation = [
         'address' => 'required|string|min:34|max:34',
     ];
 
-	public function handle (Wallet $wallet)
-	{
-		$address = $wallet->raw_data['address'];
-		$uri = 'https://blockexplorer.com/api/addr/'. $address;
+    public function handle (Wallet $wallet)
+    {
+        $address = $wallet->raw_data['address'];
+        $uri = 'https://blockexplorer.com/api/addr/'. $address;
 
         $ch = curl_init($uri);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -45,5 +46,5 @@ class BitcoinWalletHandler extends WalletHandler {
 
         $balance->value = $value;
         $balance->save();
-	}
+    }
 }

@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Helpers\WalletHandlers;
+namespace App\Services\Wallets;
+
 use App\Wallet;
 use App\Balance;
 
-class GobyteWalletHandler extends WalletHandler {
+class UniminingPool extends WalletService {
 
-	public $name = 'Gobyte wallet';
+	public $name = 'unimining.ca pool';
 	protected $fields = [
         'address' => 'text',
 	];
@@ -18,26 +19,31 @@ class GobyteWalletHandler extends WalletHandler {
 	{
 		$address = $wallet->raw_data['address'];
 		$nonce = time();
-		$uri = 'http://gobyte.ezmine.io/ext/getbalance/'. $address;
+		$uri = 'https://www.unimining.net/api/wallet?address='. $address;
 		$ch = curl_init($uri);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		// curl_setopt($ch, CURLOPT_HTTPHEADER, array('apisign:'. $sign));
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 20);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 20);
 		$execResult = curl_exec($ch);
+		/** Fix unimining.cs json error */
+		$execResult = preg_replace('#:[\s]*,#', ': 0,', $execResult);
 		curl_close($ch);
 
 		if ($execResult === false) {
 			throw new \Exception('SERVER NOT RESPONDING');
 		}
+		$json = json_decode($execResult);
 
-		$value = json_decode($execResult);
-		$symbol = 'GBX';
+		$symbol = $json->currency;
 		$balance = $wallet->balancesOfSymbol($symbol);
-
-		if (!is_numeric($value) || empty($value)) {
-			$value = 0;
-		}
+		$value = $json->unpaid;
 
 		if (is_null($balance)) {
+
+			if ($value == 0) {
+				return;
+			}
+
 			$balance = new Balance();
 			$balance->wallet_id = $wallet->id;
 			$balance->symbol = $symbol;

@@ -9,7 +9,7 @@ class WalletHandlerFactory extends Factory
 	static function get(string $handler)
 	{
 		$valid_handler = config('wallethandlers');
-	    $classPath = 'App\\Helpers\\WalletHandlers\\' . $handler;
+	    $classPath = 'App\\Services\\Wallets\\' . $handler;
 
 	    if (in_array($classPath, $valid_handler)) {
 	    	return new $classPath();

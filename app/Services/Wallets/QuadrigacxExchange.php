@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Helpers\WalletHandlers;
+namespace App\Services\Wallets;
+
 use App\Wallet;
 use App\Balance;
 
-class QuadrigacxWalletHandler extends WalletHandler {
+class QuadrigacxExchange extends WalletService {
 
 	public $name = 'Quadrigacx';
 	protected $fields = [

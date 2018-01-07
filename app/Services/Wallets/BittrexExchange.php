@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Helpers\WalletHandlers;
+namespace App\Services\Wallets;
+
 use App\Wallet;
 use App\Balance;
 
-class BittrexWalletHandler extends WalletHandler {
+class BittrexExchange extends WalletService {
 
 	public $name = 'Bittrex';
 	protected $fields = [

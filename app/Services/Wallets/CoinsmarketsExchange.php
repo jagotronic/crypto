@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Helpers\WalletHandlers;
+namespace App\Services\Wallets;
+
 use App\Wallet;
 use App\Balance;
 
-class CoinsmarketsWalletHandler extends WalletHandler {
+class CoinsmarketsExchange extends WalletService {
 
 	public $name = 'Coins Markets';
 	protected $fields = [

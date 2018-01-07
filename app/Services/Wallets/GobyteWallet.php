@@ -1,26 +1,28 @@
 <?php
 
-namespace App\Helpers\WalletHandlers;
+namespace App\Services\Wallets;
+
 use App\Wallet;
 use App\Balance;
 
-class ZecNanopoolWalletHandler extends WalletHandler {
+class GobyteWallet extends WalletService {
 
-	public $name = 'zec.nanopool.org pool';
+	public $name = 'Gobyte wallet';
 	protected $fields = [
         'address' => 'text',
 	];
     public $validation = [
-        'address' => 'required|string|min:35|max:35',
+        'address' => 'required|string|min:34|max:34',
     ];
 
 	public function handle (Wallet $wallet)
 	{
 		$address = $wallet->raw_data['address'];
-		$uri = 'https://api.nanopool.org/v1/zec/user/'. $address;
-
+		$nonce = time();
+		$uri = 'http://gobyte.ezmine.io/ext/getbalance/'. $address;
 		$ch = curl_init($uri);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		// curl_setopt($ch, CURLOPT_HTTPHEADER, array('apisign:'. $sign));
 		$execResult = curl_exec($ch);
 		curl_close($ch);
 
@@ -28,14 +30,13 @@ class ZecNanopoolWalletHandler extends WalletHandler {
 			throw new \Exception('SERVER NOT RESPONDING');
 		}
 
-		$json = json_decode($execResult);
-		if (!empty($json->error)) {
-			throw new \Exception($json->error);
-		}
-
-		$symbol = 'ZEC';
+		$value = json_decode($execResult);
+		$symbol = 'GBX';
 		$balance = $wallet->balancesOfSymbol($symbol);
-		$value = (float)$json->data->unconfirmed_balance += (float)$json->data->balance;
+
+		if (!is_numeric($value) || empty($value)) {
+			$value = 0;
+		}
 
 		if (is_null($balance)) {
 			$balance = new Balance();

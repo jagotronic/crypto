@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Helpers\WalletHandlers;
+namespace App\Services\Wallets;
+
 use App\Wallet;
 use App\Balance;
 
-class YobitWalletHandler extends WalletHandler {
+class YobitExchange extends WalletService {
 
 	public $name = 'Yobit';
 	protected $fields = [
