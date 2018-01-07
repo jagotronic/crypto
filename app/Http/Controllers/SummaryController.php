@@ -15,7 +15,7 @@ class SummaryController extends Controller
     {
         CurrenciesUpdater::updateAll();
         $response = WalletsUpdater::updateAll();
-//        $response = [];
+        // $response = [];
         $currencies = $this->fetchCurrencies();
         $balances = $this->fetchBalances($currencies);
         $totals = $this->computeTotals($balances);
@@ -39,6 +39,8 @@ class SummaryController extends Controller
                 'usd_value', 'cad_value', 'btc_value',
                 'percent_change_1h', 'percent_change_24h', 'percent_change_7d'
             ]);
+            $currencies[$currency->symbol]['icon'] = 'https://digitalcoinprice.com/application/modules/assets/images/coins/64x64/'. $currency->api_path .'.png';
+            $currencies[$currency->symbol]['web_page'] = 'https://digitalcoinprice.com/'. $currency->api_path;
         }
 
         return $currencies;
@@ -61,7 +63,15 @@ class SummaryController extends Controller
 
                 if (!isset($balances[$balance['symbol']])) {
                     $balances[$balance['symbol']] = [
-                        'balances' => []
+                        'balances' => [],
+                        'currency' => [
+                            'name' => !empty($currencies[$balance['symbol']]) ? 
+                                      $currencies[$balance['symbol']]['name'] . ' ('. $balance['symbol'] .')' : 
+                                      'Unknown ('. $balance['symbol'] .')',
+                            'logo' => !empty($currencies[$balance['symbol']]) ? 
+                                      'https://digitalcoinprice.com/application/modules/assets/images/coins/64x64/'. $currencies[$balance['symbol']]['api_path'] .'.png' : 
+                                      'http://via.placeholder.com/64?text=LOGO'
+                        ]
                     ];
                 }
 
