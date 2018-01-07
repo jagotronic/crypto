@@ -6,6 +6,7 @@ use App\Currency;
 
 class CurrenciesUpdater {
 	private static $currencies = [];
+	private static $all_currencies = null;
 
 	public static function updateAll() {
 		$response = [];
@@ -15,6 +16,7 @@ class CurrenciesUpdater {
 				'wallet' => $currency->symbol,
 				'id' => $currency->id,
 			];
+			$start = microtime(true) - $_SERVER['REQUEST_TIME_FLOAT'];
 
 			try {
 				CurrenciesUpdater::update($currency);
@@ -25,6 +27,7 @@ class CurrenciesUpdater {
 				$status['trace'] = $e->getTraceAsString();
 			}
 
+			$status['execution time'] = (microtime(true) - $_SERVER['REQUEST_TIME_FLOAT']) - $start;
 			$response[] = $status;
 		}
 
@@ -46,25 +49,9 @@ class CurrenciesUpdater {
 	public static function fetchCurrency(Currency $currency)
 	{
 		if (!array_key_exists($currency->symbol, self::$currencies)) {
-			$ch = curl_init();
-			// Disable SSL verification
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-			// Will return the response, if false it print the response
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			// Set the url
-			curl_setopt($ch, CURLOPT_URL, 'https://api.coinmarketcap.com/v1/ticker/'.$currency->api_path.'/?convert=CAD');
-			// Execute
-			$result = curl_exec($ch);
-			// Closing
-			curl_close($ch);
+			$json = self::apiCall('v1/ticker/'.$currency->api_path.'/?convert=CAD');
 
-			if ($result === false) {
-				throw new \Exception('SERVER NOT RESPONDING');
-			}
-
-			$json = json_decode($result, true);
-
-			if (!is_array($json) || count($json) !== 1) {
+			if (count($json) !== 1) {
 				throw new \Exception('INVALID RESPONSE');
 			}
 
@@ -72,5 +59,51 @@ class CurrenciesUpdater {
 		}
 
 		return self::$currencies[$currency->symbol];
+	}
+
+	private static function apiCall($endpoint)
+	{
+		$ch = curl_init();
+		// Disable SSL verification
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		// Will return the response, if false it print the response
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		// Set the url
+		curl_setopt($ch, CURLOPT_URL, 'https://api.coinmarketcap.com/' . $endpoint);
+		// Execute
+		$result = curl_exec($ch);
+		// Closing
+		curl_close($ch);
+
+		if ($result === false) {
+			throw new \Exception('SERVER NOT RESPONDING');
+		}
+
+		$json = json_decode($result, true);
+
+		if (!is_array($json)) {
+			throw new \Exception('INVALID RESPONSE');
+		}
+
+		return $json;
+	}
+
+	public static function findCurrency(string $symbol)
+	{
+		if (is_null(self::$all_currencies)) {
+			$json = self::apiCall('v1/ticker/?limit=10000&convert=CAD');
+
+			self::$all_currencies = $json;
+		}
+
+		$currencyInfo = array_filter(self::$all_currencies, function($currency) use($symbol) {
+			return $currency['symbol'] === $symbol;
+		});
+
+		if (count($currencyInfo)) {
+			return array_pop($currencyInfo);
+		}
+
+		return null;
 	}
 }

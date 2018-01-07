@@ -32,11 +32,11 @@
                     </tr>
                 </tbody>
             </table>
-@foreach($balances as $symbol => $currency_balances)
+@foreach($balances as $symbol => $item)
             <div class="panel-body Summary-balanceTitle">
                 <h2>
-                    <img src="https://digitalcoinprice.com/application/modules/assets/images/coins/64x64/{{ $currencies[$symbol]['api_path'] }}.png" alt="{{ $currencies[$symbol]['name'] }}">
-                    {{ $currencies[$symbol]['name'] }} ({{ $symbol }})
+                    <img src="{{ $item['currency']['logo'] }}" alt="{{ $item['currency']['name'] }}">
+                    {{ $item['currency']['name'] }}
                 </h2>
             </div>
             <!-- Table -->
@@ -58,7 +58,7 @@
                     </tr>
                 </tfoot>
                 <tbody>
-@foreach($currency_balances['balances'] as $balance)
+@foreach($item['balances'] as $balance)
                     <tr>
                         <td class="name">{{ $balance['wallet'] }}</td>
                         <td class="value">{{ sprintf('%s', number_format($balance['value'], 5)) }}</td>
@@ -74,8 +74,8 @@
     </div>
     <div class="Summary-currencies">
 @foreach($currencies as $currency)
-        <a class="card" href="https://digitalcoinprice.com/{{ $currency['api_path'] }}" target="_blank">
-          <img class="card-img-top" src="https://digitalcoinprice.com/application/modules/assets/images/coins/64x64/{{ $currency['api_path'] }}.png" alt="{{ $currency['name'] }}">
+        <a class="card" href="{{ $currency['web_page'] }}" target="_blank">
+          <img class="card-img-top" src="{{ $currency['icon'] }}" alt="{{ $currency['name'] }}">
           <div class="card-body">
             <h5 class="card-title">{{ $currency['symbol'] }}</h5>
             <p class="card-text align-center">

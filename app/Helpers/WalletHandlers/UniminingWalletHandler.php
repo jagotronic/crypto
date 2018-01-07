@@ -21,6 +21,8 @@ class UniminingWalletHandler extends WalletHandler {
 		$uri = 'https://www.unimining.net/api/wallet?address='. $address;
 		$ch = curl_init($uri);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 20);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 20);
 		$execResult = curl_exec($ch);
 		/** Fix unimining.cs json error */
 		$execResult = preg_replace('#:[\s]*,#', ': 0,', $execResult);

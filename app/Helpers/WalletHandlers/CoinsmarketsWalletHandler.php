@@ -38,6 +38,7 @@ throw new \Exception('Coinsmarkets API disabled');
 		curl_setopt($ch, CURLOPT_URL, 'https://coinsmarkets.com/apiv1.php');
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 		$output = curl_exec($ch);
+        curl_close($ch);
 
 /**
  * @todo need API access to continue
