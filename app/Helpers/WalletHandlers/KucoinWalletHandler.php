@@ -57,8 +57,8 @@ class KucoinWalletHandler extends WalletHandler {
 		$signstring = $endpoint.'/'.$nonce.'/'.$querystring;
 		$hash = hash_hmac('sha256',  base64_encode($signstring) , $ku_secret);
 
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $host . $endpoint);
+		// $ch = curl_init();
+		// curl_setopt($ch, CURLOPT_URL, $host . $endpoint);
 
 		$headers = [
 		  'KC-API-SIGNATURE:' . $hash,
