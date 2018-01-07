@@ -96,12 +96,10 @@ class CurrenciesUpdater {
 			self::$all_currencies = $json;
 		}
 
-		$currencyInfo = array_filter(self::$all_currencies, function($currency) use($symbol) {
-			return $currency['symbol'] === $symbol;
-		});
-
-		if (count($currencyInfo)) {
-			return array_pop($currencyInfo);
+		foreach (self::$all_currencies as $currency) {
+			if ($currency['symbol'] === $symbol) {
+				return $currency;
+			}
 		}
 
 		return null;
