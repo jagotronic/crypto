@@ -57,10 +57,6 @@ class KucoinExchange extends WalletService {
 		$querystring = '';
 		$signstring = $endpoint.'/'.$nonce.'/'.$querystring;
 		$hash = hash_hmac('sha256',  base64_encode($signstring) , $ku_secret);
-
-		// $ch = curl_init();
-		// curl_setopt($ch, CURLOPT_URL, $host . $endpoint);
-
 		$headers = [
 		  'KC-API-SIGNATURE:' . $hash,
 		  'KC-API-KEY:' . $ku_key,
@@ -68,15 +64,13 @@ class KucoinExchange extends WalletService {
 		  'Content-Type:application/json'
 		];
 
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $ch = $this->initCurl();
 		curl_setopt($ch, CURLOPT_USERAGENT,
 		    'Mozilla/4.0 (compatible; Kucoin Bot; '.php_uname('a').'; PHP/'.phpversion().')'
 		);
 		curl_setopt($ch, CURLOPT_URL, $host . $endpoint);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-
 		$outpout = curl_exec($ch);
 		curl_close($ch);
 

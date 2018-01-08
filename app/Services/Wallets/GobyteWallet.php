@@ -20,9 +20,8 @@ class GobyteWallet extends WalletService {
 		$address = $wallet->raw_data['address'];
 		$nonce = time();
 		$uri = 'http://gobyte.ezmine.io/ext/getbalance/'. $address;
-		$ch = curl_init($uri);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		// curl_setopt($ch, CURLOPT_HTTPHEADER, array('apisign:'. $sign));
+
+        $ch = $this->initCurl($uri);
 		$execResult = curl_exec($ch);
 		curl_close($ch);
 

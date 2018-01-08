@@ -31,11 +31,10 @@ throw new \Exception('Coinsmarkets API disabled');
 			'data' =>     'gettradinginfo'
 		]);
 
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $ch = $this->initCurl();
 		curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; coinsmarkets PHP client; '.php_uname('s').'; PHP/'.phpversion().')');
-		curl_setopt($ch,CURLOPT_HEADER, false);
-		curl_setopt ($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_HEADER, false);
+		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_URL, 'https://coinsmarkets.com/apiv1.php');
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 		$output = curl_exec($ch);
@@ -53,8 +52,7 @@ dd($output);
 		$uri = 'https://bittrex.com/api/v1.1/account/getbalances?apikey='. $apikey .'&nonce='. $nonce;
 		$sign = hash_hmac('sha512', $uri, $apisecret);
 
-		$ch = curl_init($uri);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $ch = $this->initCurl();
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array('apisign:'. $sign));
 		$execResult = curl_exec($ch);
 		curl_close($ch);

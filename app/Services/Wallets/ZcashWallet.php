@@ -20,8 +20,7 @@ class ZcashWallet extends WalletService {
 		$address = $wallet->raw_data['address'];
 		$uri = 'https://api.zcha.in/v2/mainnet/accounts/'. $address;
 
-		$ch = curl_init($uri);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $ch = $this->initCurl($uri);
 		$execResult = curl_exec($ch);
 		curl_close($ch);
 

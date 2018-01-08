@@ -20,8 +20,7 @@ class DesireWallet extends WalletService {
 		$address = $wallet->raw_data['address'];
 		$uri = 'https://altmix.org/coins/13-Desire/explorer/address/'. $address;
 
-		$ch = curl_init($uri);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $ch = $this->initCurl($uri);
 		$execResult = curl_exec($ch);
 		curl_close($ch);
 

@@ -39,35 +39,15 @@ abstract class WalletService {
 		return $fields;
 	}
 
-	protected function findCurrencyBySymbol($symbol)
+	function initCurl(string $url = null)
 	{
-		if (!array_key_exists($symbol, self::$currencies)) {
-			$currency = Currency::ofSymbol($symbol)->first();
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+		// curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
-			if (is_null($currency)) {
-				throw new \Exception('unknown currency symbol "'.$symbol.'"');
-			}
-
-			$currency->refresh();
-
-			self::$currencies[$symbol] = $currency;
-		}
-
-		return self::$currencies[$symbol];
-	}
-
-	protected function findCurrencyById($id)
-	{
-		$currency = Currency::find($id);
-
-		if (is_null($currency)) {
-			throw new \Exception('unknown currency id "'.$symbol.'"');
-		}
-
-		if (!array_key_exists($currency->symbol, self::$currencies)) {
-			self::$currencies[$currency->symbol] = $currency;
-		}
-
-		return self::$currencies[$currency->symbol];
+		return $ch;
 	}
 }

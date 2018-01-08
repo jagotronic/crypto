@@ -20,8 +20,7 @@ class SolarisWallet extends WalletService {
 		$address = $wallet->raw_data['address'];
 		$uri = 'https://solaris.blockexplorer.pro/ext/getbalance/'. $address;
 
-		$ch = curl_init($uri);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $ch = $this->initCurl($uri);
 		$execResult = curl_exec($ch);
 		curl_close($ch);
 

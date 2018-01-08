@@ -32,8 +32,7 @@ class YobitExchange extends WalletService {
 		    'Key: '. $apikey,
 		);
 
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $ch = $this->initCurl();
 		curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; SMART_API PHP client; '.php_uname('s').'; PHP/'.phpversion().')');
 		curl_setopt($ch, CURLOPT_URL, 'https://yobit.net/tapi/');
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);

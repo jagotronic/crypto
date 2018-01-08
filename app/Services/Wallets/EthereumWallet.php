@@ -20,8 +20,7 @@ class EthereumWallet extends WalletService {
         $address = $wallet->raw_data['address'];
         $uri = 'https://api.etherscan.io/api?module=account&action=balance&address='. $address .'&tag=latest'; //&apikey=YourApiKeyToken
 
-        $ch = curl_init($uri);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $ch = $this->initCurl($uri);
         $execResult = curl_exec($ch);
         curl_close($ch);
 

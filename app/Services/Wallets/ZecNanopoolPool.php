@@ -20,8 +20,7 @@ class ZecNanopoolPool extends WalletService {
 		$address = $wallet->raw_data['address'];
 		$uri = 'https://api.nanopool.org/v1/zec/user/'. $address;
 
-		$ch = curl_init($uri);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $ch = $this->initCurl($uri);
 		$execResult = curl_exec($ch);
 		curl_close($ch);
 
@@ -30,6 +29,7 @@ class ZecNanopoolPool extends WalletService {
 		}
 
 		$json = json_decode($execResult);
+
 		if (!empty($json->error)) {
 			throw new \Exception($json->error);
 		}
