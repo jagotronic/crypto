@@ -13,6 +13,7 @@ return [
 	App\Services\Wallets\DesireWallet::class,
 	App\Services\Wallets\EthereumWallet::class,
 	App\Services\Wallets\GobyteWallet::class,
+	App\Services\Wallets\MineprojectPool::class,
 	App\Services\Wallets\SolarisWallet::class,
 	App\Services\Wallets\ZcashWallet::class,
 	// Pools

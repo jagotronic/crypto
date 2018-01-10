@@ -112,6 +112,14 @@ class WalletsTableSeeder extends Seeder
             'description' => ''
         ]);
         DB::table('wallets')->insert([
+            'name' => 'Mineproject.ru (DSR)',
+            'handler' => 'MineprojectPool',
+            'data' => json_encode([
+                'address' => env('GOA_WALLET_ADDRESS', null),
+            ]),
+            'description' => ''
+        ]);
+        DB::table('wallets')->insert([
             'name' => 'Cryptohub pool (all type)',
             'handler' => 'CryptohubPool',
             'data' => json_encode([
