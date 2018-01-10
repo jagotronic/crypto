@@ -48,6 +48,16 @@ class WalletsTableSeeder extends Seeder
             ]),
             'description' => ''
         ]);
+        DB::table('wallets')->insert([
+            'name' => 'Quadrigacx',
+            'handler' => 'QuadrigacxExchange',
+            'data' => json_encode([
+                'apikey' => env('QUADRIGACX_APIKEY', null),
+                'apisecret' => env('QUADRIGACX_APISECRET', null),
+                'clientId' => env('QUADRIGACX_CLIENT_ID', null),
+            ]),
+            'description' => ''
+        ]);
         // Coinsmarkets API down
         // DB::table('wallets')->insert([
         //     'name' => 'My Coinsmarkets account',

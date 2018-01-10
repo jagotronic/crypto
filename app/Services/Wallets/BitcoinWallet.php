@@ -21,14 +21,20 @@ class BitcoinWallet extends WalletService {
         $uri = 'https://blockexplorer.com/api/addr/'. $address;
 
         $ch = $this->initCurl($uri);
-        $execResult = curl_exec($ch);
+        $result = $this->execute($ch);
+        $info = curl_getinfo($ch);
         curl_close($ch);
 
-        if ($execResult === false) {
-            throw new \Exception('SERVER NOT RESPONDING');
+        if (empty($result)) {
+            $this->throwException(__CLASS__, 'SERVER NOT RESPONDING', $result, $info);
         }
 
-        $json = json_decode($execResult);
+        $json = json_decode($result);
+
+        if (!is_object($json)) {
+            $this->throwException(__CLASS__, 'INVALID JSON', $result, $info);
+        }
+
         $value = (float)$json->balance;
         $symbol = 'BTC';
         $balance = $wallet->balancesOfSymbol($symbol);

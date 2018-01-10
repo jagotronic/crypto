@@ -21,13 +21,18 @@ class ZcashWallet extends WalletService {
 		$uri = 'https://api.zcha.in/v2/mainnet/accounts/'. $address;
 
         $ch = $this->initCurl($uri);
-		$execResult = curl_exec($ch);
-		curl_close($ch);
+        $result = $this->execute($ch);
+        $info = curl_getinfo($ch);
+        curl_close($ch);
 
-		$json = json_decode($execResult);
+        if (empty($result)) {
+            $this->throwException(__CLASS__, 'SERVER NOT RESPONDING', $result, $info);
+        }
+
+		$json = json_decode($result);
 
 		if (is_null($json)) {
-			throw new \Exception('SERVER NOT RESPONDING OR INVALID ADDRESS');
+            $this->throwException(__CLASS__, 'SERVER NOT RESPONDING OR INVALID ADDRESS', $result, $info);
 		}
 
 		$symbol = 'ZEC';

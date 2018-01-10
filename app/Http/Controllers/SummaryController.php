@@ -76,7 +76,7 @@ class SummaryController extends Controller
                 }
 
                 if (!isset($currencies[$balance['symbol']])) {
-                    $balance['error'] = 'unknow currency '. $balance['symbol'];
+                    $balance['error'] = 'unknown currency '. $balance['symbol'];
                 } else {
                     $balance['values'] = [
                         'USD' => $balance['value'] * $currencies[$balance['symbol']]['usd_value'],

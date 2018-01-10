@@ -2,10 +2,11 @@
 
 namespace App\Services\Wallets;
 
-use App\Wallet;
+use App\Services\ApiService;
 use App\Currency;
+use App\Wallet;
 
-abstract class WalletService {
+abstract class WalletService extends ApiService {
 
 	public $name = '';
 
@@ -37,17 +38,5 @@ abstract class WalletService {
 		}
 
 		return $fields;
-	}
-
-	function initCurl(string $url = null)
-	{
-		$ch = curl_init($url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
-		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-		// curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-
-		return $ch;
 	}
 }

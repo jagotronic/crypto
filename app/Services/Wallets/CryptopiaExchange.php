@@ -26,7 +26,7 @@ class CryptopiaExchange extends WalletService {
 		   $ct = New \Cryptopia($api_secret, $apikey);
 		   $balances = $ct->getBalance();
 		} catch(Exception $e) {
-			throw new \Exception($e->getMessage());
+            $this->throwException(__CLASS__, $e->getMessage());
 		}
 
 		foreach ($balances as $balanceArray) {

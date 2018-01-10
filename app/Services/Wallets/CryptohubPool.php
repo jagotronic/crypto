@@ -22,23 +22,23 @@ class CryptohubPool extends WalletService {
 		$url = 'https://cryptohub.online/api/pools_info/?read_key=' . $read_key;
 
         $ch = $this->initCurl($url);
-		$outpout = curl_exec($ch);
-		curl_close($ch);
+        $result = $this->execute($ch);
+        $info = curl_getinfo($ch);
+        curl_close($ch);
 
-		if ($outpout === false) {
-			throw new \Exception('SERVER NOT RESPONDING');
-		}
+        if (empty($result)) {
+            $this->throwException(__CLASS__, 'SERVER NOT RESPONDING', $result, $info);
+        }
 
-		$json = json_decode($outpout);
+		$json = json_decode($result);
 
 		if (!empty($json->error)) {
-			throw new \Exception($json->error);
+            $this->throwException(__CLASS__, $json->error, $result, $info);
 		}
 
 		foreach ($json->pools as $JsonBalance) {
 			$balance = $wallet->balancesOfSymbol($JsonBalance->code);
 			$amount = $JsonBalance->unconfirmed += $JsonBalance->confirmed;
-			// dd($amount, $balance, $JsonBalance);
 
 			if (is_null($balance)) {
 

@@ -20,7 +20,7 @@ class CurrencyFactory extends Factory
 
         if (is_null($currency)) {
             $data = CurrenciesUpdater::findCurrency($symbol);
-            
+
             $currency = new Currency();
             $currency->symbol = $symbol;
 

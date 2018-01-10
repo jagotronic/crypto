@@ -21,17 +21,18 @@ class ZecNanopoolPool extends WalletService {
 		$uri = 'https://api.nanopool.org/v1/zec/user/'. $address;
 
         $ch = $this->initCurl($uri);
-		$execResult = curl_exec($ch);
-		curl_close($ch);
+        $result = $this->execute($ch);
+        $info = curl_getinfo($ch);
+        curl_close($ch);
 
-		if ($execResult === false) {
-			throw new \Exception('SERVER NOT RESPONDING');
-		}
+        if (empty($result)) {
+            $this->throwException(__CLASS__, 'SERVER NOT RESPONDING', $result, $info);
+        }
 
-		$json = json_decode($execResult);
+		$json = json_decode($result);
 
 		if (!empty($json->error)) {
-			throw new \Exception($json->error);
+            $this->throwException(__CLASS__, $json->error, $result, $info);
 		}
 
 		$symbol = 'ZEC';

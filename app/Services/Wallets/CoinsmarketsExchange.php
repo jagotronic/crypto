@@ -21,9 +21,6 @@ class CoinsmarketsExchange extends WalletService {
 
 	public function handle (Wallet $wallet)
 	{
-
-throw new \Exception('Coinsmarkets API disabled');
-
 		$data = http_build_query([
 			'username' => $wallet->raw_data['username'],
 			'password' => $wallet->raw_data['password'],
@@ -37,48 +34,50 @@ throw new \Exception('Coinsmarkets API disabled');
 		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_URL, 'https://coinsmarkets.com/apiv1.php');
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-		$output = curl_exec($ch);
+
+        $result = $this->execute($ch);
+        $info = curl_getinfo($ch);
         curl_close($ch);
 
 /**
  * @todo need API access to continue
  */
-dd($output);
+dd($result);
 
 
-		$apikey = $wallet->raw_data['apikey'];
-		$apisecret = $wallet->raw_data['apisecret'];
-		$nonce = time();
-		$uri = 'https://bittrex.com/api/v1.1/account/getbalances?apikey='. $apikey .'&nonce='. $nonce;
-		$sign = hash_hmac('sha512', $uri, $apisecret);
+		// $apikey = $wallet->raw_data['apikey'];
+		// $apisecret = $wallet->raw_data['apisecret'];
+		// $nonce = time();
+		// $uri = 'https://bittrex.com/api/v1.1/account/getbalances?apikey='. $apikey .'&nonce='. $nonce;
+		// $sign = hash_hmac('sha512', $uri, $apisecret);
 
-        $ch = $this->initCurl();
-		curl_setopt($ch, CURLOPT_HTTPHEADER, array('apisign:'. $sign));
-		$execResult = curl_exec($ch);
-		curl_close($ch);
+  //       $ch = $this->initCurl();
+		// curl_setopt($ch, CURLOPT_HTTPHEADER, array('apisign:'. $sign));
+		// $execResult = curl_exec($ch);
+		// curl_close($ch);
 
-		if ($execResult === false) {
-			throw new \Exception('SERVER NOT RESPONDING');
-		}
+		// if ($execResult === false) {
+		// 	throw new \Exception(__CLASS__ . ' -- SERVER NOT RESPONDING');
+		// }
 
-		$json = json_decode($execResult);
+		// $json = json_decode($execResult);
 
-		if (empty($json->success)) {
-			throw new \Exception($json->message);
-		}
+		// if (empty($json->success)) {
+		// 	throw new \Exception($json->message);
+		// }
 
-		foreach ($json->result as $JsonBalance) {
-			$balance = $wallet->balancesOfSymbol($JsonBalance->Currency);
+		// foreach ($json->result as $JsonBalance) {
+		// 	$balance = $wallet->balancesOfSymbol($JsonBalance->Currency);
 
-			if (is_null($balance)) {
-				$balance = new Balance();
-				$balance->wallet_id = $wallet->id;
-				$balance->symbol = $JsonBalance->Currency;
-			}
+		// 	if (is_null($balance)) {
+		// 		$balance = new Balance();
+		// 		$balance->wallet_id = $wallet->id;
+		// 		$balance->symbol = $JsonBalance->Currency;
+		// 	}
 
-			$balance->value = $JsonBalance->Balance;
-			$balance->save();
-		}
+		// 	$balance->value = $JsonBalance->Balance;
+		// 	$balance->save();
+		// }
 
 	}
 }

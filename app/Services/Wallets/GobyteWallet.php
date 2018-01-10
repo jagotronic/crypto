@@ -22,14 +22,15 @@ class GobyteWallet extends WalletService {
 		$uri = 'http://gobyte.ezmine.io/ext/getbalance/'. $address;
 
         $ch = $this->initCurl($uri);
-		$execResult = curl_exec($ch);
-		curl_close($ch);
+        $result = $this->execute($ch);
+        $info = curl_getinfo($ch);
+        curl_close($ch);
 
-		if ($execResult === false) {
-			throw new \Exception('SERVER NOT RESPONDING');
-		}
+        if (empty($result)) {
+            $this->throwException(__CLASS__, 'SERVER NOT RESPONDING', $result, $info);
+        }
 
-		$value = json_decode($execResult);
+		$value = json_decode($result);
 		$symbol = 'GBX';
 		$balance = $wallet->balancesOfSymbol($symbol);
 
