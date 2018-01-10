@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Currency;
-use App\Factories\WalletHandlerFactory;
+use App\Factories\WalletServiceFactory;
 use App\Wallet;
 use Illuminate\Http\Request;
 
@@ -118,7 +118,7 @@ class WalletController extends Controller
         $handlerClassName = $request->get('handler');
 
         if (strlen($handlerClassName)) {
-            $handler = WalletHandlerFactory::get($handlerClassName);
+            $handler = WalletServiceFactory::get($handlerClassName);
 
             foreach ($handler->validation as $attribute => $rule) {
                 $rules['data.' . $handlerClassName . '.' . $attribute] = $rule;

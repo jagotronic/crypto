@@ -4,7 +4,7 @@ namespace App\Helpers;
 
 use App\Wallet;
 use App\Currency;
-use App\Factories\WalletHandlerFactory;
+use App\Factories\WalletServiceFactory;
 use App\Helpers\CurrenciesUpdater;
 
 class WalletsUpdater {
@@ -62,7 +62,7 @@ class WalletsUpdater {
 	}
 
 	public static function update(Wallet $wallet) {
-		$handler = WalletHandlerFactory::get($wallet->handler);
+		$handler = WalletServiceFactory::get($wallet->handler);
 		$handler->handle($wallet);
 	}
 
