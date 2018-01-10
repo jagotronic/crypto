@@ -18,7 +18,7 @@ class WalletServiceFactory extends Factory
 
     public static function isValidService(string $service)
     {
-        $valid_handler = config('wallethandlers');
+        $valid_handler = config('walletservices');
         $classPath = self::getClassPath($service);
 
         return in_array($classPath, $valid_handler);

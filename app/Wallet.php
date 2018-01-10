@@ -44,7 +44,7 @@ class Wallet extends Model
     {
         $handlers = [];
 
-        foreach (config('wallethandlers') as $classname) {
+        foreach (config('walletservices') as $classname) {
             $handler = new $classname();
             $reflectionClass = new \ReflectionClass($handler);
 
