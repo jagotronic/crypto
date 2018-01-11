@@ -16,6 +16,7 @@ return [
 	App\Services\Wallets\MineprojectPool::class,
 	App\Services\Wallets\SolarisWallet::class,
 	App\Services\Wallets\ZcashWallet::class,
+	App\Services\Wallets\CrowdcoinWallet::class,
 	// Pools
 	App\Services\Wallets\CryptohubPool::class,
 	App\Services\Wallets\UniminingPool::class,
