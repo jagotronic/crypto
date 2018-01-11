@@ -21,18 +21,19 @@ class CryptohubPool extends WalletService {
 
 		$url = 'https://cryptohub.online/api/pools_info/?read_key=' . $read_key;
 
-		$ch = curl_init($url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$outpout = curl_exec($ch);
-		curl_close($ch);
+        $ch = $this->initCurl($url);
+        $result = $this->execute($ch);
+        $info = curl_getinfo($ch);
+        curl_close($ch);
 
-		if ($outpout === false) {
-			throw new \Exception('SERVER NOT RESPONDING');
-		}
+        if (empty($result)) {
+            $this->throwException(__CLASS__, 'SERVER NOT RESPONDING', $result, $info);
+        }
 
-		$json = json_decode($outpout);
+		$json = json_decode($result);
+
 		if (!empty($json->error)) {
-			throw new \Exception($json->error);
+            $this->throwException(__CLASS__, $json->error, $result, $info);
 		}
 
 		foreach ($json->pools as $JsonBalance) {
@@ -49,7 +50,6 @@ class CryptohubPool extends WalletService {
 				$balance->wallet_id = $wallet->id;
 				$balance->symbol = $JsonBalance->code;
 			}
-
 
 			$balance->value = $amount;
 			$balance->save();

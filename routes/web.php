@@ -19,7 +19,6 @@ Auth::routes();
 
 Route::group(['middleware' => ['auth']], function($router) {
 
-	Route::get('/currencies/refresh', 'CurrencyController@refresh')->name('currencies.refresh');
 
 	$router->resources([
 		'gpus' => 'GpuController',
@@ -30,5 +29,8 @@ Route::group(['middleware' => ['auth']], function($router) {
 
 	Route::get('/home', 'HomeController@index')->name('home');
 	Route::get('/summary', 'SummaryController@index')->name('summary');
+	Route::get('/summary/refresh', 'SummaryController@refresh')->name('summary.refresh');
+	Route::get('/currencies/{currency}/refresh', 'CurrencyController@refresh')->name('currencies.refresh');
+	Route::get('/wallets/{wallet}/refresh', 'WalletController@refresh')->name('wallets.refresh');
 });
 

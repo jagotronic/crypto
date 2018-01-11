@@ -5,23 +5,24 @@ namespace App\Services\Wallets;
 use App\Wallet;
 use App\Balance;
 
-class ZecNanopoolPool extends WalletService {
+class MineprojectPool extends WalletService {
 
-	public $name = 'zec.nanopool.org pool';
+	public $name = 'pool.mineproject.ru';
 	protected $fields = [
         'address' => 'text',
 	];
     public $validation = [
-        'address' => 'required|string|min:35|max:35',
+        'address' => 'required|string|min:30|max:36',
     ];
 
 	public function handle (Wallet $wallet)
 	{
 		$address = $wallet->raw_data['address'];
-		$uri = 'https://api.nanopool.org/v1/zec/user/'. $address;
+		$nonce = time();
+		$uri = 'http://pool.mineproject.ru/api/wallet?address='. $address;
 
         $ch = $this->initCurl($uri);
-        $result = $this->execute($ch);
+        $result = $this->fixJsonError($this->execute($ch));
         $info = curl_getinfo($ch);
         curl_close($ch);
 
@@ -31,15 +32,20 @@ class ZecNanopoolPool extends WalletService {
 
 		$json = json_decode($result);
 
-		if (!empty($json->error)) {
-            $this->throwException(__CLASS__, $json->error, $result, $info);
-		}
+        if (!is_object($json)) {
+            $this->throwException(__CLASS__, 'INVALID JSON', $result, $info);
+        }
 
-		$symbol = 'ZEC';
+		$symbol = $json->currency;
 		$balance = $wallet->balancesOfSymbol($symbol);
-		$value = (float)$json->data->unconfirmed_balance += (float)$json->data->balance;
+		$value = $json->unpaid;
 
 		if (is_null($balance)) {
+
+			if ($value == 0) {
+				return;
+			}
+
 			$balance = new Balance();
 			$balance->wallet_id = $wallet->id;
 			$balance->symbol = $symbol;
@@ -47,5 +53,11 @@ class ZecNanopoolPool extends WalletService {
 
 		$balance->value = $value;
 		$balance->save();
+	}
+
+	/** Fix unimining.cs json error */
+	private function fixJsonError(string $result)
+	{
+		return preg_replace('#:[\s]*,#', ': 0,', $result);
 	}
 }

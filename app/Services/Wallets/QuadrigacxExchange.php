@@ -19,14 +19,13 @@ class QuadrigacxExchange extends WalletService {
         'apisecret' => 'required|string|min:32|max:32'
     ];
 
-	public function handle (Wallet $wallet)
+	public function handle(Wallet $wallet)
 	{
 		$response = self::getBalances($wallet);
 
 		foreach (['btc', 'eth', 'ltc', 'etc', 'btg', 'bch'] as $symbol) {
             $balance_key = $symbol.'_balance';
             $value = (float)$response->$balance_key;
-
 			$balance = $wallet->balancesOfSymbol(strtoupper($symbol));
 
             if (is_null($balance)) {
@@ -66,24 +65,25 @@ class QuadrigacxExchange extends WalletService {
         );
         $data_string = json_encode($data);
 
-        $ch = curl_init($host . $endpoint);
+        $ch = $this->initCurl($host . $endpoint, [
+            'Content-Type: application/json; charset=utf-8',
+            'Content-Length: ' . strlen($data_string)
+        ]);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                'Content-Type: application/json; charset=utf-8',
-                'Content-Length: ' . strlen($data_string))
-        );
-        $output = curl_exec($ch);
-		curl_close($ch);
 
-		if ($output === false) {
-			throw new \Exception('SERVER NOT RESPONDING');
-		}
+        $result = $this->execute($ch);
+        $info = curl_getinfo($ch);
+        curl_close($ch);
 
-		$json = json_decode($output);
+        if (empty($result)) {
+            $this->throwException(__CLASS__, 'SERVER NOT RESPONDING', $result, $info);
+        }
+
+		$json = json_decode($result);
+
 		if (!empty($json->error)) {
-			throw new \Exception($json->error);
+            $this->throwException(__CLASS__, $json->error, $result, $info);
 		}
 
 		return $json;

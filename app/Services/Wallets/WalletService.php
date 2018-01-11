@@ -2,10 +2,11 @@
 
 namespace App\Services\Wallets;
 
-use App\Wallet;
+use App\Services\ApiService;
 use App\Currency;
+use App\Wallet;
 
-abstract class WalletService {
+abstract class WalletService extends ApiService {
 
 	public $name = '';
 
@@ -37,37 +38,5 @@ abstract class WalletService {
 		}
 
 		return $fields;
-	}
-
-	protected function findCurrencyBySymbol($symbol)
-	{
-		if (!array_key_exists($symbol, self::$currencies)) {
-			$currency = Currency::ofSymbol($symbol)->first();
-
-			if (is_null($currency)) {
-				throw new \Exception('unknown currency symbol "'.$symbol.'"');
-			}
-
-			$currency->refresh();
-
-			self::$currencies[$symbol] = $currency;
-		}
-
-		return self::$currencies[$symbol];
-	}
-
-	protected function findCurrencyById($id)
-	{
-		$currency = Currency::find($id);
-
-		if (is_null($currency)) {
-			throw new \Exception('unknown currency id "'.$symbol.'"');
-		}
-
-		if (!array_key_exists($currency->symbol, self::$currencies)) {
-			self::$currencies[$currency->symbol] = $currency;
-		}
-
-		return self::$currencies[$currency->symbol];
 	}
 }

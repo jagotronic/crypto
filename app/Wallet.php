@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Factories\WalletHandlerFactory;
 
 class Wallet extends Model
 {
@@ -45,7 +44,7 @@ class Wallet extends Model
     {
         $handlers = [];
 
-        foreach (config('wallethandlers') as $classname) {
+        foreach (config('walletservices') as $classname) {
             $handler = new $classname();
             $reflectionClass = new \ReflectionClass($handler);
 

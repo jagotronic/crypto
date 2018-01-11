@@ -13,19 +13,22 @@ class SummaryController extends Controller
     
     public function index()
     {
-        CurrenciesUpdater::updateAll();
-        $response = WalletsUpdater::updateAll();
-        // $response = [];
         $currencies = $this->fetchCurrencies();
         $balances = $this->fetchBalances($currencies);
         $totals = $this->computeTotals($balances);
 
         return view('summary.index', [
-            'response' => $response,
+            'response' => [],
             'currencies' => $currencies,
             'balances' => $balances,
             'totals' => $totals,
         ]);
+    }
+
+    public function refresh()
+    {
+        CurrenciesUpdater::updateAll();
+        return WalletsUpdater::updateAll();
     }
 
     /** Build Currencies */
@@ -76,7 +79,7 @@ class SummaryController extends Controller
                 }
 
                 if (!isset($currencies[$balance['symbol']])) {
-                    $balance['error'] = 'unknow currency '. $balance['symbol'];
+                    $balance['error'] = 'unknown currency '. $balance['symbol'];
                 } else {
                     $balance['values'] = [
                         'USD' => $balance['value'] * $currencies[$balance['symbol']]['usd_value'],

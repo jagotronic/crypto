@@ -24,20 +24,20 @@ class BittrexExchange extends WalletService {
 		$nonce = time();
 		$uri = 'https://bittrex.com/api/v1.1/account/getbalances?apikey='. $apikey .'&nonce='. $nonce;
 		$sign = hash_hmac('sha512', $uri, $apisecret);
-		$ch = curl_init($uri);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, array('apisign:'. $sign));
-		$execResult = curl_exec($ch);
-		curl_close($ch);
 
-		if ($execResult === false) {
-			throw new \Exception('SERVER NOT RESPONDING');
+        $ch = $this->initCurl($uri, ['apisign:'. $sign]);
+        $result = $this->execute($ch);
+        $info = curl_getinfo($ch);
+        curl_close($ch);
+
+		if (empty($result)) {
+            $this->throwException(__CLASS__, 'SERVER NOT RESPONDING', $result, $info);
 		}
 
-		$json = json_decode($execResult);
+		$json = json_decode($result);
 
 		if (empty($json->success)) {
-			throw new \Exception($json->message);
+            $this->throwException(__CLASS__, $json->message, $result, $info);
 		}
 
 		foreach ($json->result as $JsonBalance) {

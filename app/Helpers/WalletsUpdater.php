@@ -4,57 +4,47 @@ namespace App\Helpers;
 
 use App\Wallet;
 use App\Currency;
-use App\Factories\WalletHandlerFactory;
+use App\Factories\WalletServiceFactory;
 use App\Helpers\CurrenciesUpdater;
+use URL;
+use Asset;
 
 class WalletsUpdater {
 
 	public static function updateAll() {
 		$response = [];
-		$symbols = [];
 		$start_updates_at = microtime(true) - $_SERVER['REQUEST_TIME_FLOAT'];
+		$mh = curl_multi_init();
+		$curl_requests = [];
 
 		foreach (Wallet::all() as $wallet) {
-			$status = [
-				'wallet' => $wallet->name,
-				'id' => $wallet->id,
-			];
-			$start = microtime(true) - $_SERVER['REQUEST_TIME_FLOAT'];
+			$url = Asset(URL::route('wallets.refresh', ['id' => $wallet->id], false));
 
-			$wallet->message = null;
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_HEADER, 0);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
+			curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 
-			try {
-				WalletsUpdater::update($wallet);
-				$status['success'] = true;
-			} catch (\Exception $e) {
-				$status['success'] = false;
-				$status['message'] = $wallet->message = ($wallet->name . ' -- ' . $e->getMessage());
-				$status['trace'] = $e->getTraceAsString();
-			}
-
-			$wallet->save();
-
-			$symbols = array_unique(
-				array_merge(
-					$symbols,
-					array_pluck($wallet->fresh()->balances->toArray(), 'symbol')
-				)
-			);
-
-			$status['execution_time'] = (microtime(true) - $_SERVER['REQUEST_TIME_FLOAT']) - $start;
-			$status['symbols'] = $symbols;
-
-			$response[] = $status;
+			curl_multi_add_handle($mh, $ch);
 		}
 
-		// $start = microtime(true) - $_SERVER['REQUEST_TIME_FLOAT'];
 
-		// self::createCurrenciesIfNotExists($symbols);
+		$active = null;
+		//execute the handles
+		do {
+		    $mrc = curl_multi_exec($mh, $active);
+		} while ($mrc == CURLM_CALL_MULTI_PERFORM);
 
-		// $response['MissingCurrency'] = [
-		// 	'symbols' => $symbols,
-		// 	'execution_time' => (microtime(true) - $_SERVER['REQUEST_TIME_FLOAT']) - $start
-		// ];
+		while ($active && $mrc == CURLM_OK) {
+		    if (curl_multi_select($mh) != -1) {
+		        do {
+		            $mrc = curl_multi_exec($mh, $active);
+		        } while ($mrc == CURLM_CALL_MULTI_PERFORM);
+		    }
+		}
 		
 		$response['update_all_time'] = (microtime(true) - $_SERVER['REQUEST_TIME_FLOAT']) - $start_updates_at;
 
@@ -62,32 +52,7 @@ class WalletsUpdater {
 	}
 
 	public static function update(Wallet $wallet) {
-		$handler = WalletHandlerFactory::get($wallet->handler);
+		$handler = WalletServiceFactory::get($wallet->handler);
 		$handler->handle($wallet);
 	}
-
-	// private static function createCurrenciesIfNotExists($symbols)
-	// {
-	// 	foreach ($symbols as $symbol) {
-
-	// 		if (Currency::ofSymbol($symbol)->first()) {
-	// 			continue;
-	// 		}
-
-	// 		$data = CurrenciesUpdater::findCurrency($symbol);
-
-	//         $currency = new Currency();
-	//         $currency->name = $data['name'];
-	//         $currency->symbol = $data['symbol'];
-	//         $currency->api_path = $data['id'];
-	//         $currency->usd_value = $data['price_usd'];
-	//         $currency->cad_value = $data['price_cad'];
-	//         $currency->btc_value = $data['price_btc'];
-	// 		$currency->percent_change_1h = $data['percent_change_1h'];
-	// 		$currency->percent_change_24h = $data['percent_change_24h'];
-	// 		$currency->percent_change_7d = $data['percent_change_7d'];
-	//         $currency->description = '';
-	//         $currency->save();
-	// 	}
-	// }
 }

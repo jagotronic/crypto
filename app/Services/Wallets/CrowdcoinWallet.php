@@ -5,9 +5,9 @@ namespace App\Services\Wallets;
 use App\Wallet;
 use App\Balance;
 
-class BitcoinWallet extends WalletService {
+class CrowdcoinWallet extends WalletService {
 
-    public $name = 'Bitcoin wallet';
+    public $name = 'CrowdCoin wallet';
     protected $fields = [
         'address' => 'text',
     ];
@@ -18,25 +18,18 @@ class BitcoinWallet extends WalletService {
     public function handle (Wallet $wallet)
     {
         $address = $wallet->raw_data['address'];
-        $uri = 'https://blockexplorer.com/api/addr/'. $address;
+        $uri = 'http://crowdcoin.site:3001/ext/getbalance/'. $address; //&apikey=YourApiKeyToken
 
         $ch = $this->initCurl($uri);
-        $result = $this->execute($ch);
+        $value = $this->execute($ch);
         $info = curl_getinfo($ch);
         curl_close($ch);
 
-        if (empty($result)) {
-            $this->throwException(__CLASS__, 'SERVER NOT RESPONDING', $result, $info);
+        if (empty($value)) {
+            $this->throwException(__CLASS__, 'SERVER NOT RESPONDING', $value, $info);
         }
 
-        $json = json_decode($result);
-
-        if (!is_object($json)) {
-            $this->throwException(__CLASS__, 'INVALID JSON', $result, $info);
-        }
-
-        $value = (float)$json->balance;
-        $symbol = 'BTC';
+        $symbol = 'CRC';
         $balance = $wallet->balancesOfSymbol($symbol);
 
         if (!is_numeric($value) || empty($value)) {

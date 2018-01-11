@@ -48,6 +48,16 @@ class WalletsTableSeeder extends Seeder
             ]),
             'description' => ''
         ]);
+        DB::table('wallets')->insert([
+            'name' => 'Quadrigacx',
+            'handler' => 'QuadrigacxExchange',
+            'data' => json_encode([
+                'apikey' => env('QUADRIGACX_APIKEY', null),
+                'apisecret' => env('QUADRIGACX_APISECRET', null),
+                'clientId' => env('QUADRIGACX_CLIENT_ID', null),
+            ]),
+            'description' => ''
+        ]);
         // Coinsmarkets API down
         // DB::table('wallets')->insert([
         //     'name' => 'My Coinsmarkets account',
@@ -108,6 +118,14 @@ class WalletsTableSeeder extends Seeder
             'handler' => 'UniminingPool',
             'data' => json_encode([
                 'address' => env('DESIRE_WALLET_ADDRESS', null),
+            ]),
+            'description' => ''
+        ]);
+        DB::table('wallets')->insert([
+            'name' => 'Mineproject.ru (DSR)',
+            'handler' => 'MineprojectPool',
+            'data' => json_encode([
+                'address' => env('GOA_WALLET_ADDRESS', null),
             ]),
             'description' => ''
         ]);

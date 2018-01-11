@@ -25,6 +25,7 @@ class CreateCurrenciesTable extends Migration
             $table->decimal('percent_change_24h', 16, 4)->nullable();
             $table->decimal('percent_change_7d', 16, 4)->nullable();
             $table->string('description');
+            $table->text('message')->nullable();
             $table->timestamps();
         });
     }

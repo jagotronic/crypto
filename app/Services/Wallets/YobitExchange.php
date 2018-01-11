@@ -32,24 +32,25 @@ class YobitExchange extends WalletService {
 		    'Key: '. $apikey,
 		);
 
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $ch = $this->initCurl(null, $headers);
+
 		curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; SMART_API PHP client; '.php_uname('s').'; PHP/'.phpversion().')');
 		curl_setopt($ch, CURLOPT_URL, 'https://yobit.net/tapi/');
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-		curl_setopt($ch, CURLOPT_ENCODING , 'gzip');
-		$outpout = curl_exec($ch);
-		curl_close($ch);
 
-		if ($outpout === false) {
-			throw new \Exception('SERVER NOT RESPONDING');
-		}
+        $result = $this->execute($ch);
+        $info = curl_getinfo($ch);
+        curl_close($ch);
 
-		$json = json_decode($outpout);
+        if (empty($result)) {
+            $this->throwException(__CLASS__, 'SERVER NOT RESPONDING', $result, $info);
+        }
+
+		$json = json_decode($result);
+
 		if (!empty($json->error)) {
-			throw new \Exception($json->error);
+            $this->throwException(__CLASS__, $json->error, $result, $info);
 		}
 
 		foreach ($json->return->funds_incl_orders as $symbol => $value) {

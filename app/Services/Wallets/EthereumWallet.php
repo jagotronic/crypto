@@ -20,16 +20,16 @@ class EthereumWallet extends WalletService {
         $address = $wallet->raw_data['address'];
         $uri = 'https://api.etherscan.io/api?module=account&action=balance&address='. $address .'&tag=latest'; //&apikey=YourApiKeyToken
 
-        $ch = curl_init($uri);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $execResult = curl_exec($ch);
+        $ch = $this->initCurl($uri);
+        $result = $this->execute($ch);
+        $info = curl_getinfo($ch);
         curl_close($ch);
 
-        if ($execResult === false) {
-            throw new \Exception('SERVER NOT RESPONDING');
+        if (empty($result)) {
+            $this->throwException(__CLASS__, 'SERVER NOT RESPONDING', $result, $info);
         }
 
-        $json = json_decode($execResult);
+        $json = json_decode($result);
         $value = (float)$json->result / 1000000000000000000;
         $symbol = 'ETH';
         $balance = $wallet->balancesOfSymbol($symbol);

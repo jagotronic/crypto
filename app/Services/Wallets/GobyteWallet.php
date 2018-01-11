@@ -20,17 +20,17 @@ class GobyteWallet extends WalletService {
 		$address = $wallet->raw_data['address'];
 		$nonce = time();
 		$uri = 'http://gobyte.ezmine.io/ext/getbalance/'. $address;
-		$ch = curl_init($uri);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		// curl_setopt($ch, CURLOPT_HTTPHEADER, array('apisign:'. $sign));
-		$execResult = curl_exec($ch);
-		curl_close($ch);
 
-		if ($execResult === false) {
-			throw new \Exception('SERVER NOT RESPONDING');
-		}
+        $ch = $this->initCurl($uri);
+        $result = $this->execute($ch);
+        $info = curl_getinfo($ch);
+        curl_close($ch);
 
-		$value = json_decode($execResult);
+        if (empty($result)) {
+            $this->throwException(__CLASS__, 'SERVER NOT RESPONDING', $result, $info);
+        }
+
+		$value = json_decode($result);
 		$symbol = 'GBX';
 		$balance = $wallet->balancesOfSymbol($symbol);
 
