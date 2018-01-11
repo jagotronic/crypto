@@ -2,7 +2,38 @@
 
 namespace App\Services;
 
+use Illuminate\Database\Eloquent\Model;
+
 abstract class ApiService {
+    public $name = '';
+    protected $fields = [];
+    public $validation = [];
+
+    abstract protected function handle(Model $model);
+
+    public function getName()
+    {
+        return !empty($this->name) ? $this->name : __CLASS__;
+    }
+
+    public function getFields()
+    {
+        $fields = $this->fields;
+
+        foreach ($fields as $key => $value) {
+            if (is_string($value)) {
+                $fields[$key] = [
+                    'type' => $value
+                ];
+            }
+
+            if (!empty($value['data'])) {
+                $fields[$key]['data'] = $this->getData();
+            }
+        }
+
+        return $fields;
+    }
 
     protected function initCurl(string $url = null, $headers = [])
     {

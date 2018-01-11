@@ -4,8 +4,10 @@ namespace App\Services\Wallets;
 
 use App\Wallet;
 use App\Balance;
+use App\Services\ApiService;
+use Illuminate\Database\Eloquent\Model;
 
-class ZcashWallet extends WalletService {
+class ZcashWallet extends ApiService {
 
 	public $name = 'Zcash wallet';
 	protected $fields = [
@@ -15,7 +17,7 @@ class ZcashWallet extends WalletService {
         'address' => 'required|string|min:35|max:35',
     ];
 
-	public function handle (Wallet $wallet)
+	public function handle (Model $wallet)
 	{
 		$address = $wallet->raw_data['address'];
 		$uri = 'https://api.zcha.in/v2/mainnet/accounts/'. $address;

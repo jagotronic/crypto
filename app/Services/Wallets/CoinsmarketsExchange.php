@@ -4,8 +4,10 @@ namespace App\Services\Wallets;
 
 use App\Wallet;
 use App\Balance;
+use App\Services\ApiService;
+use Illuminate\Database\Eloquent\Model;
 
-class CoinsmarketsExchange extends WalletService {
+class CoinsmarketsExchange extends ApiService {
 
 	public $name = 'Coins Markets';
 	protected $fields = [
@@ -19,7 +21,7 @@ class CoinsmarketsExchange extends WalletService {
         'pin' => 'required|numeric',
     ];
 
-	public function handle (Wallet $wallet)
+	public function handle (Model $wallet)
 	{
 		$data = http_build_query([
 			'username' => $wallet->raw_data['username'],

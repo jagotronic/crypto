@@ -4,8 +4,10 @@ namespace App\Services\Wallets;
 
 use App\Wallet;
 use App\Balance;
+use App\Services\ApiService;
+use Illuminate\Database\Eloquent\Model;
 
-class YobitExchange extends WalletService {
+class YobitExchange extends ApiService {
 
 	public $name = 'Yobit';
 	protected $fields = [
@@ -17,7 +19,7 @@ class YobitExchange extends WalletService {
         'apisecret' => 'required|string|min:36|max:36'
     ];
 
-	public function handle (Wallet $wallet)
+	public function handle (Model $wallet)
 	{
 		$apikey = $wallet->raw_data['apikey'];
 		$api_secret = $wallet->raw_data['apisecret'];
