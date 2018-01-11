@@ -101,7 +101,7 @@ class WalletController extends Controller
      * @param  \App\Wallet  $wallet
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Wallet $wallet)
+    public function destroy(Wallet $wallet, Request $request)
     {
         $wallet->delete();
         $request->session()->flash('message', 'Wallet successfully deleted!');
