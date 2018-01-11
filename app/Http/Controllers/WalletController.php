@@ -150,4 +150,9 @@ class WalletController extends Controller
 
         return $wallet->fresh(['balances']);
     }
+
+    public function message(Wallet $wallet)
+    {
+        return view('wallets.message', ['wallet' => $wallet]);
+    }
 }

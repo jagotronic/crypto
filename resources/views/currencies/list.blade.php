@@ -5,7 +5,7 @@
                     <thead>
                         <th>Name</th>
                         <th>Symbol</th>
-                        <th>API</th>
+                        <th>Status</th>
                         <th>USD</th>
                         <th>CAD</th>
                         <th>BTC</th>
@@ -15,7 +15,7 @@
                     <!-- Table Body -->
                     <tbody>
                         @foreach ($currencies as $currency)
-                            <tr>
+                            <tr class="{{ !empty($currency->message) ? 'danger' : '' }}">
                                 <!-- Task Name -->
                                 <td class="table-text">
                                     <div>{{ $currency->name }}</div>
@@ -24,16 +24,16 @@
                                     <div>{{ $currency->symbol }}</div>
                                 </td>
                                 <td>
-                                    <div>{{ $currency->api_path }}</div>
+                                    <a href="javascript:;" class="js-status{{ !empty($currency->message) ? ' text-danger' : '' }}" data-link="{{ URL::route('currencies.message', ['id' => $currency->id], false) }}">{{ !empty($currency->message) ? 'error' : 'OK' }}</a>
                                 </td>
                                 <td>
-                                    <div>{{ $currency->usd_value }}</div>
+                                    <div class="js-usd">{{ $currency->usd_value }}</div>
                                 </td>
                                 <td>
-                                    <div>{{ $currency->cad_value }}</div>
+                                    <div class="js-cad">{{ $currency->cad_value }}</div>
                                 </td>
                                 <td>
-                                    <div>{{ $currency->btc_value }}</div>
+                                    <div class="js-btc">{{ $currency->btc_value }}</div>
                                 </td>
                                 <td class="text-right">
 							        <form style="display: inline-block;" action="{{ url('currencies/'.$currency->id) }}" method="POST">
@@ -47,8 +47,64 @@
                                     <a class="btn btn-success btn-xs" href="{{ url('currencies/'.$currency->id.'/edit') }}">
                                         <i class="fa fa-pencil"></i> Edit
                                     </a>
+                                    <button class="btn btn-info btn-xs js-refresh" data-link="{{ URL::route('currencies.refresh', ['id' => $currency->id], false) }}">
+                                        <i class="fa fa-refresh"></i> Refresh
+                                    </button>
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
+                <div class="modal fade" id="cryptoModal" tabindex="-1" role="dialog" aria-labelledby="cryptoModalLabel">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="cryptoModalLabel">Error message</h4>
+                      </div>
+                      <div class="modal-body">
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+@section('scripts')
+        <script>
+            $(function() {
+                $('.js-refresh').click(function() {
+                    var $link = $(this);
+                    var $tr = $link.closest('tr').addClass('info').removeClass('danger');
+                    var $status = $tr.find('.js-status').html('loading...');
+                    var $usd = $tr.find('.js-usd');
+                    var $cad = $tr.find('.js-cad');
+                    var $btc = $tr.find('.js-btc');
+
+                    $.get($link.data('link'), {}, function(data) {
+                        $tr.removeClass('info');
+                        $status.html(data.message !== null ? 'error' : 'OK');
+
+                        if (data.message !== null) {
+                            $tr.addClass('danger');
+                        }
+
+                        $usd.html(data.usd_value);
+                        $cad.html(data.cad_value);
+                        $btc.html(data.btc_value);
+                    });
+                });
+
+                $('.js-status').click(function() {
+                    var link = $(this).data('link');
+
+                    $.get(link, {}, function(html) {
+                        $('#cryptoModal .modal-body').html(html);
+                        $('#cryptoModal').modal({
+                            show: true
+                        });
+                    });
+                });
+            });
+        </script>
+@endsection

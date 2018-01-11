@@ -135,6 +135,11 @@ class CurrencyController extends Controller
         return $currency->fresh();
     }
 
+    public function message(Currency $currency)
+    {
+        return view('currencies.message', ['currency' => $currency]);
+    }
+
     /**
      * Model validation method
      * @param  Request $request
