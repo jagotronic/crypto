@@ -11,10 +11,13 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->insert([
-            'name' => 'Sebastien Rodrigue',
-            'email' => 'sebastien@srodrigue.com',
-            'password' => bcrypt('pastouche')
-        ]);
+        $this->includePersonalSeeds();
+    }
+
+    public function includePersonalSeeds()
+    {
+        if (file_exists(__DIR__ . '/mySeeds/users.php')) {
+            include(__DIR__ . '/mySeeds/users.php');
+        }
     }
 }
