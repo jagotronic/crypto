@@ -105,6 +105,10 @@
                         });
                     });
                 });
+
+                $('.js-refresh-all').click(function() {
+                     $('.js-refresh').trigger('click');
+                });
             });
         </script>
 @endsection
