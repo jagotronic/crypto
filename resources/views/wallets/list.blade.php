@@ -62,13 +62,14 @@
         <script>
             $(function() {
                 $('.js-refresh').click(function() {
-                    var $link = $(this);
+                    var $link = $(this).prop('disabled', true);
                     var $tr = $link.closest('tr').addClass('info').removeClass('danger');
                     var $status = $tr.find('.js-status').html('loading...').removeClass('text-danger');
 
                     $.get($link.data('link'), {}, function(data) {
                         $tr.removeClass('info');
                         $status.html(data.message !== null ? 'error' : 'OK');
+                        $link.prop('disabled', false);
 
                         if (data.message !== null) {
                             $tr.addClass('danger');
@@ -89,7 +90,7 @@
                 });
 
                 $('.js-refresh-all').click(function() {
-                     $('.js-refresh').trigger('click');
+                    $('.js-refresh:not([disabled])').trigger('click');
                 });
             });
         </script>
