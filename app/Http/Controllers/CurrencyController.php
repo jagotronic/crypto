@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Currency;
-use Illuminate\Http\Request;
+use App\Factories\CurrencyServiceFactory;
 use App\Helpers\CurrenciesUpdater;
+use Illuminate\Http\Request;
 
 class CurrencyController extends Controller
 {
@@ -26,7 +27,7 @@ class CurrencyController extends Controller
      */
     public function create()
     {
-        return view('currencies.create');
+        return view('currencies.create', ['handlers' => $this->getHandlers()]);
     }
 
     /**
@@ -42,11 +43,12 @@ class CurrencyController extends Controller
         $currency = new Currency();
         $currency->name = request('name');
         $currency->symbol = request('symbol');
-        $currency->api_path = request('api_path');
+        $currency->handler = request('handler');
         $currency->usd_value = request('usd_value', null);
         $currency->cad_value = request('cad_value', null);
         $currency->btc_value = request('btc_value', null);
         $currency->description = request('description', '');
+        $currency->data = request('data', []);
         $currency->save();
 
         $request->session()->flash('message', 'Currency successfully created!');
@@ -72,7 +74,7 @@ class CurrencyController extends Controller
      */
     public function edit(Request $request, Currency $currency)
     {
-        return view('currencies.edit', ['currency' => $currency]);
+        return view('currencies.edit', ['currency' => $currency, 'handlers' => $this->getHandlers()]);
     }
 
     /**
@@ -88,11 +90,12 @@ class CurrencyController extends Controller
 
         $currency->name = request('name');
         $currency->symbol = request('symbol');
-        $currency->api_path = request('api_path');
+        $currency->handler = request('handler');
         $currency->usd_value = request('usd_value', null);
         $currency->cad_value = request('cad_value', null);
         $currency->btc_value = request('btc_value', null);
         $currency->description = request('description', '');
+        $currency->data = request('data', []);
         $currency->save();
 
         $request->session()->flash('message', 'Currency successfully updated!');
@@ -113,6 +116,12 @@ class CurrencyController extends Controller
         return redirect('currencies');
     }
 
+    /**
+     * Refresh the specified resource.
+     *
+     * @param  \App\Wallet  $wallet
+     * @return \Illuminate\Http\Response
+     */
     public function refresh(Currency $currency)
     {
         $currency->message = null;
@@ -121,6 +130,10 @@ class CurrencyController extends Controller
             CurrenciesUpdater::update($currency);
         } catch (\Exception $e) {
             $message = json_decode($e->getMessage(), true);
+
+            if (is_null($message)) {
+                $message = $e->getMessage();
+            }
 
             if (!is_array($message)) {
                 $message = ['message' => $message];
@@ -135,6 +148,12 @@ class CurrencyController extends Controller
         return $currency->fresh();
     }
 
+    /**
+     * Show the specified resource message.
+     *
+     * @param  \App\Wallet  $wallet
+     * @return \Illuminate\Http\Response
+     */
     public function message(Currency $currency)
     {
         return view('currencies.message', ['currency' => $currency]);
@@ -147,13 +166,36 @@ class CurrencyController extends Controller
      */
     private function validateMe(Request $request)
     {
-        $request->validate([
+        $rules = [
             'name' => 'required|string|max:191|unique:currencies,name,'.$request->get('id'),
             'symbol' => 'required|string|max:191|unique:currencies,symbol,'.$request->get('id'),
-            'api_path' => 'required|string|max:191|unique:currencies,api_path,'.$request->get('id'),
+            'handler' => 'required|valid_currency_handler|string|min:2',
             'usd_value' => 'nullable|regex:/[\d]{0,8}.[\d]{0,8}/',
             'cad_value' => 'nullable|regex:/[\d]{0,8}.[\d]{0,8}/',
             'btc_value' => 'nullable|regex:/[\d]{0,8}.[\d]{0,8}/'
-        ]);
+        ];
+
+        $handlerClassName = $request->get('handler');
+
+        if (strlen($handlerClassName)) {
+            $handler = CurrencyServiceFactory::get($handlerClassName);
+
+            if ($handlerClassName === 'Manual') {
+                $rules['usd_value'] = 'required|regex:/^[\d]{0,8}.[\d]{0,8}$/';
+                $rules['cad_value'] = 'required|regex:/^[\d]{0,8}.[\d]{0,8}$/';
+                $rules['btc_value'] = 'required|regex:/^[\d]{0,8}.[\d]{0,8}$/';
+            }
+
+            foreach ($handler->validation as $attribute => $rule) {
+                $rules['data.' . $handlerClassName . '.' . $attribute] = $rule;
+            }
+        }
+
+        $request->validate($rules);
+    }
+
+    private function getHandlers()
+    {
+        return Currency::getHandlers();
     }
 }

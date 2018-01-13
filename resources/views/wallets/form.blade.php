@@ -34,9 +34,9 @@
                 </div>
             </div>
 
-            @include('wallets.form_handlers', [
+            @include('forms.services', [
                 'handlers' => $handlers,
-                'wallet' => !empty($wallet) ? $wallet : null,
+                'model' => !empty($wallet) ? $wallet : null,
             ])
 
             <!-- Description -->
@@ -70,12 +70,9 @@
                 $hiddens.addClass('hidden');
 
                 if (handler) {
-                    console.log('.handler-' + handler)
                     $hiddens.filter('.handler-' + handler).removeClass('hidden');
                 }
             }
-
-            // $('#WalletForm').on('update.handler_params', updateHandlers);
 
             $('#handler').on('change', updateHandlers)
 

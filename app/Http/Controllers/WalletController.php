@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Currency;
 use App\Factories\WalletServiceFactory;
 use App\Helpers\WalletsUpdater;
 use App\Wallet;
@@ -109,11 +108,59 @@ class WalletController extends Controller
         return redirect('wallets');
     }
 
+    /**
+     * Refresh the specified resource.
+     *
+     * @param  \App\Wallet  $wallet
+     * @return \Illuminate\Http\Response
+     */
+    public function refresh(Wallet $wallet)
+    {
+        $wallet->message = null;
+
+        try {
+            WalletsUpdater::update($wallet);
+        } catch (\Exception $e) {
+            $message = json_decode($e->getMessage(), true);
+
+            if (is_null($message)) {
+                $message = $e->getMessage();
+            }
+            
+            if (!is_array($message)) {
+                $message = ['message' => $message];
+            }
+
+            $message['trace'] = $e->getTraceAsString();
+            $wallet->message = json_encode($message);
+        }
+
+        $wallet->save();
+
+        return $wallet->fresh(['balances']);
+    }
+
+    /**
+     * Show the specified resource message.
+     *
+     * @param  \App\Wallet  $wallet
+     * @return \Illuminate\Http\Response
+     */
+    public function message(Wallet $wallet)
+    {
+        return view('wallets.message', ['wallet' => $wallet]);
+    }
+
+    /**
+     * Model validation method
+     * @param  Request $request
+     * @return [void]
+     */
     private function validateMe(Request $request)
     {
         $rules = [
             'name' => 'required|string|max:191|unique:wallets,name,'.$request->get('id'),
-            'handler' => 'required|valid_wallet_handler|string|min:10',
+            'handler' => 'required|valid_wallet_handler|string|min:2',
         ];
 
         $handlerClassName = $request->get('handler');
@@ -134,25 +181,4 @@ class WalletController extends Controller
         return Wallet::getHandlers();
     }
 
-    public function refresh(Wallet $wallet)
-    {
-        $wallet->message = null;
-
-        try {
-            WalletsUpdater::update($wallet);
-        } catch (\Exception $e) {
-            $message = json_decode($e->getMessage(), true);
-            $message['trace'] = $e->getTraceAsString();
-            $wallet->message = json_encode($message);
-        }
-
-        $wallet->save();
-
-        return $wallet->fresh(['balances']);
-    }
-
-    public function message(Wallet $wallet)
-    {
-        return view('wallets.message', ['wallet' => $wallet]);
-    }
 }

@@ -37,7 +37,11 @@ class Wallet extends Model
 
     public function setDataAttribute($data)
     {
-        $this->attributes['data'] = json_encode($data[$this->attributes['handler']]);
+        if (!empty($data[$this->attributes['handler']])) {
+            $this->attributes['data'] = json_encode($data[$this->attributes['handler']]);
+        } else {
+            $this->attributes['data'] = json_encode($data);
+        }
     }
 
     static function getHandlers()

@@ -8,6 +8,7 @@ use App\Factories\CurrencyFactory;
 
 class Balance extends Model
 {
+
     public function wallet()
     {
         return $this->belongsTo('App\Wallet');
