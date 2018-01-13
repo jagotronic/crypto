@@ -4,8 +4,10 @@ namespace App\Services\Wallets;
 
 use App\Wallet;
 use App\Balance;
+use App\Services\ApiService;
+use Illuminate\Database\Eloquent\Model;
 
-class EthereumWallet extends WalletService {
+class EthereumWallet extends ApiService {
 
     public $name = 'Ethereum wallet';
     protected $fields = [
@@ -15,7 +17,7 @@ class EthereumWallet extends WalletService {
         'address' => 'required|string|min:42|max:42',
     ];
 
-    public function handle (Wallet $wallet)
+    public function handle (Model $wallet)
     {
         $address = $wallet->raw_data['address'];
         $uri = 'https://api.etherscan.io/api?module=account&action=balance&address='. $address .'&tag=latest'; //&apikey=YourApiKeyToken

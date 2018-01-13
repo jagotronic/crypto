@@ -4,8 +4,10 @@ namespace App\Services\Wallets;
 
 use App\Wallet;
 use App\Balance;
+use App\Services\ApiService;
+use Illuminate\Database\Eloquent\Model;
 
-class QuadrigacxExchange extends WalletService {
+class QuadrigacxExchange extends ApiService {
 
 	public $name = 'Quadrigacx';
 	protected $fields = [
@@ -19,7 +21,7 @@ class QuadrigacxExchange extends WalletService {
         'apisecret' => 'required|string|min:32|max:32'
     ];
 
-	public function handle(Wallet $wallet)
+	public function handle(Model $wallet)
 	{
 		$response = self::getBalances($wallet);
 

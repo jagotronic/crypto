@@ -4,8 +4,10 @@ namespace App\Services\Wallets;
 
 use App\Wallet;
 use App\Balance;
+use App\Services\ApiService;
+use Illuminate\Database\Eloquent\Model;
 
-class BittrexExchange extends WalletService {
+class BittrexExchange extends ApiService {
 
 	public $name = 'Bittrex';
 	protected $fields = [
@@ -17,7 +19,7 @@ class BittrexExchange extends WalletService {
         'apisecret' => 'required|string|min:32|max:32'
     ];
 
-	public function handle (Wallet $wallet)
+	public function handle (Model $wallet)
 	{
 		$apikey = $wallet->raw_data['apikey'];
 		$apisecret = $wallet->raw_data['apisecret'];

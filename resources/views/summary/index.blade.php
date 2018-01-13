@@ -35,8 +35,8 @@
 @foreach($balances as $symbol => $item)
             <div class="panel-body Summary-balanceTitle">
                 <h2>
-                    <img src="{{ $item['currency']['logo'] }}" alt="{{ $item['currency']['name'] }}">
-                    {{ $item['currency']['name'] }}
+                    <img src="{{ $currencies[$symbol]['icon_src'] }}" alt="{{ $currencies[$symbol]['name'] }}">
+                    {{ $currencies[$symbol]['name'] }}
                 </h2>
             </div>
             <!-- Table -->
@@ -74,8 +74,12 @@
     </div>
     <div class="Summary-currencies">
 @foreach($currencies as $currency)
-        <a class="card" href="{{ $currency['web_page'] }}" target="_blank">
-          <img class="card-img-top" src="{{ $currency['icon'] }}" alt="{{ $currency['name'] }}">
+    @if(empty($currency['webpage_url']))
+        <span class="card">
+    @else
+        <a class="card" href="{{ $currency['webpage_url'] }}" target="_blank">
+    @endif
+          <img class="card-img-top" src="{{ $currency['icon_src'] }}" alt="{{ $currency['name'] }}">
           <div class="card-body">
             <h5 class="card-title">{{ $currency['symbol'] }}</h5>
             <p class="card-text align-center">
@@ -101,11 +105,15 @@
                 </div>
             </div>
           </div>
+    @if(empty($currency['webpage_url']))
+        </span>
+    @else
         </a>
+    @endif
 @endforeach
     </div>
 </div>
-<pre>{{  print_r($response) }}</pre>
+<!-- <pre>{{  print_r($response) }}</pre> -->
 @endsection
 @section('scripts')
 <script>

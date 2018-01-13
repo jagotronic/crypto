@@ -4,8 +4,10 @@ namespace App\Services\Wallets;
 
 use App\Wallet;
 use App\Balance;
+use App\Services\ApiService;
+use Illuminate\Database\Eloquent\Model;
 
-class CryptohubPool extends WalletService {
+class CryptohubPool extends ApiService {
 
 	public $name = 'Cryptohub pool';
 	protected $fields = [
@@ -15,14 +17,14 @@ class CryptohubPool extends WalletService {
         'read_key' => 'required|string|min:37|max:37',
     ];
 
-	public function handle (Wallet $wallet)
+	public function handle (Model $wallet)
 	{
 		$read_key = $wallet->raw_data['read_key'];
 
 		$url = 'https://cryptohub.online/api/pools_info/?read_key=' . $read_key;
 
         $ch = $this->initCurl($url);
-        $result = $this->execute($ch);
+        $result = $this->execute($ch, 10);
         $info = curl_getinfo($ch);
         curl_close($ch);
 

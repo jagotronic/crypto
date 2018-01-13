@@ -3,6 +3,9 @@
 namespace App\Helpers;
 
 use App\Currency;
+use App\Factories\CurrencyServiceFactory;
+use URL;
+use Asset;
 
 class CurrenciesUpdater {
     private static $currencies = [];
@@ -10,115 +13,45 @@ class CurrenciesUpdater {
 
     public static function updateAll() {
         $response = [];
+        $start_updates_at = microtime(true) - $_SERVER['REQUEST_TIME_FLOAT'];
+        $mh = curl_multi_init();
+        $curl_requests = [];
 
         foreach (Currency::all() as $currency) {
-            $status = [
-                'wallet' => $currency->symbol,
-                'id' => $currency->id,
-            ];
-            $start = microtime(true) - $_SERVER['REQUEST_TIME_FLOAT'];
+            $url = Asset(URL::route('currencies.refresh', ['id' => $currency->id], false));
 
-            try {
-                CurrenciesUpdater::update($currency);
-                $status['success'] = true;
-            } catch (\Exception $e) {
-                $status['success'] = false;
-                $status['message'] = $currency->symbol . ' -- ' . $e->getMessage();
-                $status['trace'] = $e->getTraceAsString();
-            }
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_HEADER, 0);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 
-            $status['execution time'] = (microtime(true) - $_SERVER['REQUEST_TIME_FLOAT']) - $start;
-            $response[] = $status;
+            curl_multi_add_handle($mh, $ch);
         }
+
+        $active = null;
+        //execute the handles
+        do {
+            $mrc = curl_multi_exec($mh, $active);
+        } while ($mrc == CURLM_CALL_MULTI_PERFORM);
+
+        while ($active && $mrc == CURLM_OK) {
+            if (curl_multi_select($mh) != -1) {
+                do {
+                    $mrc = curl_multi_exec($mh, $active);
+                } while ($mrc == CURLM_CALL_MULTI_PERFORM);
+            }
+        }
+        
+        $response['update_all_time'] = (microtime(true) - $_SERVER['REQUEST_TIME_FLOAT']) - $start_updates_at;
 
         return $response;
     }
 
     public static function update(Currency $currency) {
-        $currencyData = self::fetchCurrency($currency);
-
-        $currency->usd_value = $currencyData['price_usd'];
-        $currency->cad_value = $currencyData['price_cad'];
-        $currency->btc_value = $currencyData['price_btc'];
-        $currency->percent_change_1h = $currencyData['percent_change_1h'];
-        $currency->percent_change_24h = $currencyData['percent_change_24h'];
-        $currency->percent_change_7d = $currencyData['percent_change_7d'];
-        $currency->save();
-    }
-
-    public static function fetchCurrency(Currency $currency)
-    {
-        if (!array_key_exists($currency->symbol, self::$currencies)) {
-            $json = self::apiCall('v1/ticker/'.$currency->api_path.'/?convert=CAD');
-
-            if (count($json) !== 1) {
-                throw new \Exception(__CLASS__ . ' -- INVALID RESPONSE');
-            }
-
-            self::$currencies[$currency->symbol] = array_pop($json);
-        }
-
-        return self::$currencies[$currency->symbol];
-    }
-
-    private static function apiCall($endpoint)
-    {
-        $ch = curl_init();
-        $url = 'https://api.coinmarketcap.com/' . $endpoint;
-        $headers = array(
-            'Content-type: text/xml;charset=UTF-8', 
-            'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8', 
-            'Cache-Control: no-cache', 
-            'Pragma: no-cache', 
-        );
-
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_ENCODING, 'gzip, deflate'); 
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_URL, $url);
-
-        $result = null;
-        $try = 5;
-
-        do {
-            $result = curl_exec($ch);
-            $try--;
-        } while (empty($result) && $try > 0);
-
-        $ci = curl_getinfo($ch);
-        curl_close($ch);
-
-        if (empty($result)) {
-            throw new \Exception(__CLASS__ . ' -- SERVER NOT RESPONDING ('. $url .') -- ' . json_encode($ci));
-        }
-
-        $json = json_decode($result, true);
-
-        if (!is_array($json)) {
-            throw new \Exception(__CLASS__ . ' -- INVALID RESPONSE');
-        }
-
-        return $json;
-    }
-
-    public static function findCurrency(string $symbol)
-    {
-        if (is_null(self::$all_currencies)) {
-            $json = self::apiCall('v1/ticker/?limit=10000&convert=CAD');
-
-            self::$all_currencies = $json;
-        }
-
-        foreach (self::$all_currencies as $currency) {
-            if ($currency['symbol'] === $symbol) {
-                return $currency;
-            }
-        }
-
-        return null;
+        $handler = CurrencyServiceFactory::get($currency->handler);
+        $handler->handle($currency);
     }
 }

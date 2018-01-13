@@ -4,8 +4,10 @@ namespace App\Services\Wallets;
 
 use App\Wallet;
 use App\Balance;
+use App\Services\ApiService;
+use Illuminate\Database\Eloquent\Model;
 
-class MineprojectPool extends WalletService {
+class MineprojectPool extends ApiService {
 
 	public $name = 'pool.mineproject.ru';
 	protected $fields = [
@@ -15,7 +17,7 @@ class MineprojectPool extends WalletService {
         'address' => 'required|string|min:30|max:36',
     ];
 
-	public function handle (Wallet $wallet)
+	public function handle (Model $wallet)
 	{
 		$address = $wallet->raw_data['address'];
 		$nonce = time();

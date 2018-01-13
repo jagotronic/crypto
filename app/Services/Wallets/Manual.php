@@ -5,8 +5,10 @@ namespace App\Services\Wallets;
 use App\Wallet;
 use App\Currency;
 use App\Balance;
+use App\Services\ApiService;
+use Illuminate\Database\Eloquent\Model;
 
-class Manual extends WalletService {
+class Manual extends ApiService {
 
 	public $name = 'Manual';
 	protected $fields = [
@@ -22,7 +24,7 @@ class Manual extends WalletService {
         'value' => 'required|regex:/^[\d]{0,8}.[\d]{0,8}$/'
     ];
 
-	public function handle(Wallet $wallet)
+	public function handle(Model $wallet)
 	{
 		$balance = $wallet->balancesOfSymbol($wallet->raw_data['currency']);
 

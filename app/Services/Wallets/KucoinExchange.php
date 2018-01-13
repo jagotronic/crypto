@@ -4,8 +4,10 @@ namespace App\Services\Wallets;
 
 use App\Wallet;
 use App\Balance;
+use App\Services\ApiService;
+use Illuminate\Database\Eloquent\Model;
 
-class KucoinExchange extends WalletService {
+class KucoinExchange extends ApiService {
 
     public $name = 'Kucoin';
     protected $fields = [
@@ -17,7 +19,7 @@ class KucoinExchange extends WalletService {
         'apisecret' => 'required|string|min:36|max:36'
     ];
 
-    public function handle (Wallet $wallet)
+    public function handle (Model $wallet)
     {
         $response = self::getBalances($wallet);
 

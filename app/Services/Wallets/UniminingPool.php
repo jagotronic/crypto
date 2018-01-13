@@ -4,8 +4,10 @@ namespace App\Services\Wallets;
 
 use App\Wallet;
 use App\Balance;
+use App\Services\ApiService;
+use Illuminate\Database\Eloquent\Model;
 
-class UniminingPool extends WalletService {
+class UniminingPool extends ApiService {
 
 	public $name = 'unimining.ca pool';
 	protected $fields = [
@@ -15,7 +17,7 @@ class UniminingPool extends WalletService {
         'address' => 'required|string|min:34|max:34',
     ];
 
-	public function handle (Wallet $wallet)
+	public function handle (Model $wallet)
 	{
 		$address = $wallet->raw_data['address'];
 		$uri = 'https://www.unimining.net/api/wallet?address='. $address;

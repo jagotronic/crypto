@@ -4,8 +4,10 @@ namespace App\Services\Wallets;
 
 use App\Wallet;
 use App\Balance;
+use App\Services\ApiService;
+use Illuminate\Database\Eloquent\Model;
 
-class DesireWallet extends WalletService {
+class DesireWallet extends ApiService {
 
 	public $name = 'Desire wallet';
 	protected $fields = [
@@ -15,7 +17,7 @@ class DesireWallet extends WalletService {
         'address' => 'required|string|min:34|max:34',
     ];
 
-	public function handle (Wallet $wallet)
+	public function handle (Model $wallet)
 	{
 		$address = $wallet->raw_data['address'];
 		$uri = 'https://altmix.org/coins/13-Desire/explorer/address/'. $address;

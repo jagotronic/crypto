@@ -18,21 +18,33 @@
                 </div>
             </div>
 
+            <!-- Handler -->
+            <div class="form-group">
+                <label for="task" class="col-sm-3 control-label">Handler</label>
+
+                <div class="col-sm-6">
+                    <select class="form-control" name="handler" id="handler">
+                        <option value="">Choose</option>
+@foreach ($handlers as $h)
+                        <option value="{{ $h['id'] }}" {{ old('handler', !empty($currency) ? $currency->handler : '') == $h['id'] ? "selected" : "" }}>
+                            {{ trans($h['name']) }}
+                        </option>
+@endforeach
+                    </select>
+                </div>
+            </div>
+
+            @include('forms.services', [
+                'handlers' => $handlers,
+                'model' => !empty($currency) ? $currency : null,
+            ])
+
             <!-- Currency Symbol -->
             <div class="form-group">
                 <label for="task" class="col-sm-3 control-label">Symbol</label>
 
                 <div class="col-sm-6">
                     <input type="text" name="symbol" value="{{ old('symbol', !empty($currency) ? $currency->symbol : '') }}" id="task-name" class="form-control">
-                </div>
-            </div>
-
-            <!-- Currency Symbol -->
-            <div class="form-group">
-                <label for="task" class="col-sm-3 control-label">API path</label>
-
-                <div class="col-sm-6">
-                    <input type="text" name="api_path" value="{{ old('api_path', !empty($currency) ? $currency->api_path : '') }}" id="task-name" class="form-control">
                 </div>
             </div>
 
@@ -84,3 +96,21 @@
                 </div>
             </div>
         </form>
+@section('scripts')
+        <script>
+            var $hiddens = $('.hidden');
+
+            function updateHandlers() {
+                let handler = $('#handler').val();
+                $hiddens.addClass('hidden');
+
+                if (handler) {
+                    $hiddens.filter('.handler-' + handler).removeClass('hidden');
+                }
+            }
+
+            $('#handler').on('change', updateHandlers)
+
+            updateHandlers();
+        </script>
+@endsection
