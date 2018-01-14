@@ -1,5 +1,5 @@
 
-                <table class="table table-striped task-table">
+                <table class="table task-table">
 
                     <!-- Table Headings -->
                     <thead>
@@ -12,7 +12,7 @@
                     <!-- Table Body -->
                     <tbody>
                         @foreach ($wallets as $wallet)
-                            <tr class="{{ !empty($wallet->message) ? 'danger' : '' }}">
+                            <tr class="wallet{{ !empty($wallet->message) ? ' danger' : '' }}">
                                 <!-- Task Name -->
                                 <td class="table-text">
                                     <div>{{ $wallet->name }}</div>
@@ -40,6 +40,17 @@
                                     </button>
                                 </td>
                             </tr>
+                            @foreach($wallet->balances as $balance)
+                            <tr class="active balance balance-wallet-{{ $wallet->id }}">
+                                <td class="table-text">
+                                    <small>{{ $balance->symbol }}</small>
+                                </td>
+                                <td>
+                                    <small>{{ $balance->value }}</small>
+                                </td>
+                                <td colspan="2">&nbsp;</td>
+                            </tr>
+                            @endforeach
                         @endforeach
                     </tbody>
                 </table>
@@ -74,6 +85,17 @@
                         if (data.message !== null) {
                             $tr.addClass('danger');
                             $status.addClass('text-danger');
+                        } else {
+                            $tr.nextAll('.balance-wallet-' + data.id).remove();
+                            $(data.balances).each(function() {
+                                $([
+                                    '<tr class="active balance">',
+                                        '<td class="table-text"><small>'+ this.symbol +'</small></td>',
+                                        '<td><small>'+ this.value +'</small></td>',
+                                        '<td colspan="2">&nbsp;</td>',
+                                    '</tr>',
+                                ].join('')).insertAfter($tr);
+                            });
                         }
                     });
                 });
