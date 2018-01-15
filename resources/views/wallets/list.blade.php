@@ -89,7 +89,7 @@
                             $tr.nextAll('.balance-wallet-' + data.id).remove();
                             $(data.balances).each(function() {
                                 $([
-                                    '<tr class="active balance">',
+                                    '<tr class="active balance balance-wallet-'+ data.id +'">',
                                         '<td class="table-text"><small>'+ this.symbol +'</small></td>',
                                         '<td><small>'+ this.value +'</small></td>',
                                         '<td colspan="2">&nbsp;</td>',
