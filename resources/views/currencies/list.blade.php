@@ -74,9 +74,9 @@
         <script>
             $(function() {
                 $('.js-refresh').click(function() {
-                    var $link = $(this);
+                    var $link = $(this).prop('disabled', true);
                     var $tr = $link.closest('tr').addClass('info').removeClass('danger');
-                    var $status = $tr.find('.js-status').html('loading...');
+                    var $status = $tr.find('.js-status').html('loading...').removeClass('text-danger');;
                     var $usd = $tr.find('.js-usd');
                     var $cad = $tr.find('.js-cad');
                     var $btc = $tr.find('.js-btc');
@@ -84,9 +84,11 @@
                     $.get($link.data('link'), {}, function(data) {
                         $tr.removeClass('info');
                         $status.html(data.message !== null ? 'error' : 'OK');
+                        $link.prop('disabled', false);
 
                         if (data.message !== null) {
                             $tr.addClass('danger');
+                            $status.addClass('text-danger');
                         }
 
                         $usd.html(data.usd_value);
@@ -104,6 +106,10 @@
                             show: true
                         });
                     });
+                });
+
+                $('.js-refresh-all').click(function() {
+                    $('.js-refresh:not([disabled])').trigger('click');
                 });
             });
         </script>

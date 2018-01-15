@@ -8,6 +8,7 @@ use URL;
 use Asset;
 
 class CurrenciesUpdater {
+
     private static $currencies = [];
     private static $all_currencies = null;
 

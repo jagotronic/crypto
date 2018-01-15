@@ -9,25 +9,33 @@ use App\Helpers\CurrenciesUpdater;
 class CurrencyFactory extends Factory
 {
     
-    static function get(string $symbol)
+    public static function get(string $symbol)
     {
         return Currency::ofSymbol($symbol)->first();
     }
 
-    static function createIfNotExists(string $symbol)
+    public static function createIfNotExists(string $symbol)
     {
         $currency = self::get($symbol);
 
         if (is_null($currency)) {
+            $currency = self::seekForCurrency($symbol);
+        }
 
-            foreach (config('currencyservices') as $serviceClassPath) {
-                $service = new $serviceClassPath();
-                $currencyData = $service->find($symbol);
+        return $currency;
+    }
 
-                if (!is_null($currencyData)) {
-                    $currency = self::createCurrency($currencyData);
-                    break;
-                }
+    public static function seekForCurrency(string $symbol)
+    {
+        $currency = null;
+
+        foreach (config('currencyservices') as $serviceClassPath) {
+            $service = new $serviceClassPath();
+            $currencyData = $service->find($symbol);
+
+            if (!is_null($currencyData)) {
+                $currency = self::createCurrency($currencyData);
+                break;
             }
         }
 

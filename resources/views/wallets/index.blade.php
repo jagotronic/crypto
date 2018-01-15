@@ -9,7 +9,11 @@
 			@include('commun.message')
 
 @if (count($wallets) > 0)
-	        <h2>List of wallets</h2>
+	        <h2>List of wallets
+                <button class="pull-right btn btn-info btn-xs js-refresh-all">
+                    <i class="fa fa-refresh"></i> Refresh All
+                </button>
+            </h2>
 		</div>
 		@include('wallets.list')
         <div class="panel-body">

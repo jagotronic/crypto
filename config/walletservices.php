@@ -17,7 +17,9 @@ return [
 	App\Services\Wallets\SolarisWallet::class,
 	App\Services\Wallets\ZcashWallet::class,
 	App\Services\Wallets\CrowdcoinWallet::class,
+	App\Services\Wallets\GoaWallet::class,
 	// Pools
+	App\Services\Wallets\AltminerPool::class,
 	App\Services\Wallets\CryptohubPool::class,
 	App\Services\Wallets\UniminingPool::class,
 	App\Services\Wallets\ZecNanopoolPool::class,
