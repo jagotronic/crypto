@@ -20,7 +20,8 @@ class CrowdcoinWallet extends ApiService {
     public function handle (Model $wallet)
     {
         $address = $wallet->raw_data['address'];
-        $uri = 'http://crowdcoin.site:3001/ext/getbalance/'. $address; //&apikey=YourApiKeyToken
+        // $uri = 'http://crowdcoin.site:3001/ext/getbalance/'. $address; //&apikey=YourApiKeyToken
+        $uri = 'http://explorer.cryptopros.us/ext/getbalance/'. $address; //&apikey=YourApiKeyToken
 
         $ch = $this->initCurl($uri);
         $value = $this->execute($ch);
