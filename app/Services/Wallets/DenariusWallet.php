@@ -7,21 +7,20 @@ use App\Balance;
 use App\Services\ApiService;
 use Illuminate\Database\Eloquent\Model;
 
-class CrowdcoinWallet extends ApiService {
+class DenariusWallet extends ApiService {
 
-    public $name = 'CrowdCoin wallet';
+    public $name = 'Denarius wallet';
     protected $fields = [
         'address' => 'text',
     ];
     public $validation = [
-        'address' => 'required|string|min:34|max:34',
+        'address' => 'required|string|min:30|max:36',
     ];
 
     public function handle (Model $wallet)
     {
         $address = $wallet->raw_data['address'];
-        // $uri = 'http://crowdcoin.site:3001/ext/getbalance/'. $address; //&apikey=YourApiKeyToken
-        $uri = 'http://explorer.cryptopros.us/ext/getbalance/'. $address; //&apikey=YourApiKeyToken
+        $uri = 'https://denariusexplorer.org/ext/getbalance/'. $address; //&apikey=YourApiKeyToken
 
         $ch = $this->initCurl($uri);
         $value = $this->execute($ch);
@@ -32,7 +31,7 @@ class CrowdcoinWallet extends ApiService {
             $this->throwException(__CLASS__, 'SERVER NOT RESPONDING', $value, $info);
         }
 
-        $symbol = 'CRC';
+        $symbol = 'DNR';
         $balance = $wallet->balancesOfSymbol($symbol);
 
         if (!is_numeric($value) || empty($value)) {
