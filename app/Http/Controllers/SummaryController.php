@@ -19,7 +19,6 @@ class SummaryController extends Controller
 
         return view('summary.index', [
             'response' => [],
-            'currencies' => $currencies,
             'balances' => $balances,
             'totals' => $totals,
         ]);
@@ -69,6 +68,7 @@ class SummaryController extends Controller
                 if (!isset($balances[$balance['symbol']])) {
                     $balances[$balance['symbol']] = [
                         'balances' => [],
+                        'currency' => empty($currencies[$balance['symbol']]) ?: $currencies[$balance['symbol']]
                     ];
                 }
 
@@ -89,17 +89,16 @@ class SummaryController extends Controller
         return $balances;
     }
 
-    private function computeTotals($balances)
+    private function computeTotals(&$balances)
     {
         $totals = [
             'USD' => 0,
             'CAD' => 0,
             'BTC' => 0
         ];
-        $currencies = [];
 
         foreach ($balances as $symbol => $items) {
-            $currencies[$symbol] = [
+            $total = [
                 'USD' => 0,
                 'CAD' => 0,
                 'BTC' => 0,
@@ -111,19 +110,18 @@ class SummaryController extends Controller
             }
 
             foreach ($items['balances'] as $balance) {
-                $currencies[$symbol]['USD'] += $balance['values']['USD'];
+                $total['USD'] += $balance['values']['USD'];
                 $totals['USD'] += $balance['values']['USD'];
-                $currencies[$symbol]['CAD'] += $balance['values']['CAD'];
+                $total['CAD'] += $balance['values']['CAD'];
                 $totals['CAD'] += $balance['values']['CAD'];
-                $currencies[$symbol]['BTC'] += $balance['values']['BTC'];
+                $total['BTC'] += $balance['values']['BTC'];
                 $totals['BTC'] += $balance['values']['BTC'];
-                $currencies[$symbol]['value'] += $balance['value'];
+                $total['value'] += $balance['value'];
             }
+
+            $balances[$symbol]['totals'] = $total;
         }
 
-        return [
-            'summary' => $totals,
-            'currencies' => $currencies
-        ];
+        return $totals;
     }
 }
