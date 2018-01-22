@@ -4,7 +4,7 @@ namespace App\Services\Wallets;
 
 use App\Services\YimpPoolService;
 
-class ZPoolCa extends YimpPoolService {
+class ZPoolCaPool extends YimpPoolService {
 
 	public $name = 'zpool.ca pool';
 

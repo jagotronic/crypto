@@ -24,7 +24,7 @@ return [
 	App\Services\Wallets\MineprojectPool::class,
 	App\Services\Wallets\UniminingPool::class,
 	App\Services\Wallets\ZecNanopoolPool::class,
-	App\Services\Wallets\ZPoolCa::class,
+	App\Services\Wallets\ZPoolCaPool::class,
 
 	// Others
 	App\Services\Wallets\Manual::class,
