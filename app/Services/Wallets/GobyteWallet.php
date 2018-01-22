@@ -5,9 +5,10 @@ namespace App\Services\Wallets;
 use App\Wallet;
 use App\Balance;
 use App\Services\ApiService;
+use App\Services\Wallets\Type\WalletService;
 use Illuminate\Database\Eloquent\Model;
 
-class GobyteWallet extends ApiService {
+class GobyteWallet extends ApiService implements WalletService {
 
 	public $name = 'Gobyte wallet';
 	protected $fields = [

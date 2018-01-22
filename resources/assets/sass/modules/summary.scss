@@ -1,53 +1,9 @@
 
 .Summary {
 	@extend .container-fluid;
-
-	display: flex;
 }
 
-.Summary-currencies {
-	max-width: 300px;
-
-	flex: 0 0 auto;
-
-	.card {
-		margin-bottom: 15px;
-		background-color: $gray-lighter;
-		color: $text-color;
-
-		.card-body {
-			padding-top: 5px;
-		}
-		&:hover {
-			background-color: $gray-light;
-		}
-	}
-
-	h5 { 
-		margin-top: 0;
-		text-align: center;
-		font-weight: 700;
-		border-bottom: 1px solid $gray-light;
-    	padding-bottom: 5px;
-	}
-
-	img {
-		width: 100%;
-		max-width: 32px;
-		margin: 0 auto;
-		margin: 10px auto 5px;
-	}
-}
-
-.Summary-balances {
-	margin-right: 15px;
-
-	flex: 1 1 auto;
-	
-	.panel-body { border-top: none !important; }
-}
-
-.Summary-totals {
+.Summary-myTotals {
     font-size: 1.5em;
 
 	.superTotal {
@@ -55,6 +11,7 @@
 	}
 
 	.card {
+		white-space: nowrap;
 		border-right: none;
 		border-top: none;
 		background-color: $gray-lighter;
@@ -62,11 +19,14 @@
 	    border-radius: 0;
 	    border-left-style: dashed;
 	}
+
+	p {
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
 }
 
 .Summary-balanceTable {
-	table { text-align: right; }
-
 	th { text-align: right; }
 
 	td.name {
@@ -85,29 +45,61 @@
 	}
 }
 
-.Summary-balanceTitle {
+.Summary-spacer {
+	border-left-style: dashed !important;
+}
+
+.Summary-currencyTitle {
 	padding-bottom: 0;
+	text-align: left;
+	margin-top: 10px;
+	margin-bottom: 0;
+	font-size: 24px;
+	color: $text-color;
 
 	img {
 		max-width: 36px;
-    	vertical-align: bottom;
-    	margin-right: 15px;
+    	vertical-align: text-bottom;
 	}
 }
 
-.Summary-currencyPercentRow {
-	border-top: 1px solid $gray-light;
+.Summary-currency {
 	white-space: nowrap;
+	margin-bottom: 10px;
+	border-right-width: 0 !important;
+	border-top-width: 0 !important;
+
+	a {
+		margin-top: 20px;
+		display: block;
+		padding: 5px;
+
+		&:hover {
+			background-color: #fafafa;
+		}
+	}
+}
+
+.Summary-currencyPercents {
+	text-align: right;
+	margin-top: 5px;
+	color: $text-color;
 
 	display: flex;
 }
 
-.Summary-currencyPercentCol {
-	width: 33%;
-	text-align: center;
+.Summary-currencyPercentValue {
 	padding: 5px 5px 0;
+}
 
-	flex: 1 1 auto;
+.Summary-currencyValue {
+	white-space: nowrap;
+	height: 35px;
+	background-color: #F8F5F0;
+    font-size: 0.8em;
+    vertical-align: middle !important;
+
+	sub { color: gray; }
 }
 
 .Summary-currencyArrow {

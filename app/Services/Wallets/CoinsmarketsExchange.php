@@ -5,9 +5,10 @@ namespace App\Services\Wallets;
 use App\Wallet;
 use App\Balance;
 use App\Services\ApiService;
+use App\Services\Wallets\Type\ExchangeService;
 use Illuminate\Database\Eloquent\Model;
 
-class CoinsmarketsExchange extends ApiService {
+class CoinsmarketsExchange extends ApiService implements ExchangeService {
 
 	public $name = 'Coins Markets';
 	protected $fields = [

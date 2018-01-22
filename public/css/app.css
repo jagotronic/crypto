@@ -11835,68 +11835,16 @@ input:focus,
   }
 }
 
-.Summary {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-}
-
-.Summary-currencies {
-  max-width: 300px;
-  -webkit-box-flex: 0;
-      -ms-flex: 0 0 auto;
-          flex: 0 0 auto;
-}
-
-.Summary-currencies .card {
-  margin-bottom: 15px;
-  background-color: #F8F5F0;
-  color: #3E3F3A;
-}
-
-.Summary-currencies .card .card-body {
-  padding-top: 5px;
-}
-
-.Summary-currencies .card:hover {
-  background-color: #DFD7CA;
-}
-
-.Summary-currencies h5 {
-  margin-top: 0;
-  text-align: center;
-  font-weight: 700;
-  border-bottom: 1px solid #DFD7CA;
-  padding-bottom: 5px;
-}
-
-.Summary-currencies img {
-  width: 100%;
-  max-width: 32px;
-  margin: 0 auto;
-  margin: 10px auto 5px;
-}
-
-.Summary-balances {
-  margin-right: 15px;
-  -webkit-box-flex: 1;
-      -ms-flex: 1 1 auto;
-          flex: 1 1 auto;
-}
-
-.Summary-balances .panel-body {
-  border-top: none !important;
-}
-
-.Summary-totals {
+.Summary-myTotals {
   font-size: 1.5em;
 }
 
-.Summary-totals .superTotal {
+.Summary-myTotals .superTotal {
   padding: 0;
 }
 
-.Summary-totals .card {
+.Summary-myTotals .card {
+  white-space: nowrap;
   border-right: none;
   border-top: none;
   background-color: #F8F5F0;
@@ -11905,8 +11853,9 @@ input:focus,
   border-left-style: dashed;
 }
 
-.Summary-balanceTable table {
-  text-align: right;
+.Summary-myTotals p {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .Summary-balanceTable th {
@@ -11928,31 +11877,64 @@ input:focus,
   border-top: 4px double #DFD7CA;
 }
 
-.Summary-balanceTitle {
+.Summary-spacer {
+  border-left-style: dashed !important;
+}
+
+.Summary-currencyTitle {
   padding-bottom: 0;
+  text-align: left;
+  margin-top: 10px;
+  margin-bottom: 0;
+  font-size: 24px;
+  color: #3E3F3A;
 }
 
-.Summary-balanceTitle img {
+.Summary-currencyTitle img {
   max-width: 36px;
-  vertical-align: bottom;
-  margin-right: 15px;
+  vertical-align: text-bottom;
 }
 
-.Summary-currencyPercentRow {
-  border-top: 1px solid #DFD7CA;
+.Summary-currency {
   white-space: nowrap;
+  margin-bottom: 10px;
+  border-right-width: 0 !important;
+  border-top-width: 0 !important;
+}
+
+.Summary-currency a {
+  margin-top: 20px;
+  display: block;
+  padding: 5px;
+}
+
+.Summary-currency a:hover {
+  background-color: #fafafa;
+}
+
+.Summary-currencyPercents {
+  text-align: right;
+  margin-top: 5px;
+  color: #3E3F3A;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
 }
 
-.Summary-currencyPercentCol {
-  width: 33%;
-  text-align: center;
+.Summary-currencyPercentValue {
   padding: 5px 5px 0;
-  -webkit-box-flex: 1;
-      -ms-flex: 1 1 auto;
-          flex: 1 1 auto;
+}
+
+.Summary-currencyValue {
+  white-space: nowrap;
+  height: 35px;
+  background-color: #F8F5F0;
+  font-size: 0.8em;
+  vertical-align: middle !important;
+}
+
+.Summary-currencyValue sub {
+  color: gray;
 }
 
 .Summary-currencyArrow {
@@ -11965,5 +11947,36 @@ input:focus,
 
 .minus .Summary-currencyArrow:before {
   content: "\F063";
+}
+
+.Wallet-list {
+  border-bottom: 1px solid #DFD7CA;
+}
+
+.Wallet-typeRow {
+  background-color: #3E3F3A;
+  color: #fff;
+}
+
+.Wallet-balanceRow {
+  padding: 0 !important;
+}
+
+.Wallet-balance {
+  display: block;
+  padding: 6px 10px;
+  border-left: 5px solid #fff;
+  margin-left: -1px;
+  background-color: #F8F5F0;
+  position: relative;
+}
+
+.Wallet-balance:before {
+  content: ' ';
+  border-left: 1px solid #DFD7CA;
+  position: absolute;
+  left: 1px;
+  top: 0;
+  height: 100%;
 }
 

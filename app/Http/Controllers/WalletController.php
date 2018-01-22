@@ -17,7 +17,9 @@ class WalletController extends Controller
     public function index()
     {
         $wallets = Wallet::all();
-        return view('wallets.index', ['wallets'=>$wallets]);
+        $wallets = $wallets->sortBy('type')->groupBy('type');
+
+        return view('wallets.index', ['walletsGroup' => $wallets]);
     }
 
     /**

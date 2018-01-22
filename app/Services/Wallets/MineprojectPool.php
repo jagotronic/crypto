@@ -5,9 +5,10 @@ namespace App\Services\Wallets;
 use App\Wallet;
 use App\Balance;
 use App\Services\ApiService;
+use App\Services\Wallets\Type\PoolService;
 use Illuminate\Database\Eloquent\Model;
 
-class MineprojectPool extends ApiService {
+class MineprojectPool extends ApiService implements PoolService {
 
 	public $name = 'pool.mineproject.ru';
 	protected $fields = [
