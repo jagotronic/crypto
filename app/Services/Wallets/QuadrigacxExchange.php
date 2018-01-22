@@ -5,9 +5,10 @@ namespace App\Services\Wallets;
 use App\Wallet;
 use App\Balance;
 use App\Services\ApiService;
+use App\Services\Wallets\Type\ExchangeService;
 use Illuminate\Database\Eloquent\Model;
 
-class QuadrigacxExchange extends ApiService {
+class QuadrigacxExchange extends ApiService implements ExchangeService {
 
 	public $name = 'Quadrigacx';
 	protected $fields = [

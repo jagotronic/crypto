@@ -5,9 +5,10 @@ namespace App\Services\Wallets;
 use App\Wallet;
 use App\Balance;
 use App\Services\ApiService;
+use App\Services\Wallets\Type\WalletService;
 use Illuminate\Database\Eloquent\Model;
 
-class SolarisWallet extends ApiService {
+class SolarisWallet extends ApiService implements WalletService {
 
 	public $name = 'Solaris wallet';
 	protected $fields = [

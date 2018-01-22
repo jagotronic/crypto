@@ -5,9 +5,10 @@ namespace App\Services\Wallets;
 use App\Wallet;
 use App\Balance;
 use App\Services\ApiService;
+use App\Services\Wallets\Type\ExchangeService;
 use Illuminate\Database\Eloquent\Model;
 
-class CryptopiaExchange extends ApiService {
+class CryptopiaExchange extends ApiService implements ExchangeService {
 
 	public $name = 'Cryptopia';
 	protected $fields = [

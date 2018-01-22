@@ -2,6 +2,11 @@
 
 namespace App;
 
+use App\Services\Wallets\Type\PoolService;
+use App\Services\Wallets\Type\WalletService;
+use App\Services\Wallets\Type\ExchangeService;
+use App\Factories\WalletServiceFactory;
+
 use Illuminate\Database\Eloquent\Model;
 
 class Wallet extends Model
@@ -42,6 +47,21 @@ class Wallet extends Model
         } else {
             $this->attributes['data'] = json_encode($data);
         }
+    }
+
+    public function getTypeAttribute()
+    {
+        $service = WalletServiceFactory::get($this->handler);
+
+        if ($service instanceof PoolService) {
+            return 'pool';
+        } elseif ($service instanceof WalletService) {
+            return 'wallet';
+        } elseif ($service instanceof ExchangeService) {
+            return 'exchange';
+        }
+
+        return 'other';
     }
 
     static function getHandlers()

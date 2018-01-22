@@ -5,9 +5,10 @@ namespace App\Services\Wallets;
 use App\Wallet;
 use App\Balance;
 use App\Services\ApiService;
+use App\Services\Wallets\Type\PoolService;
 use Illuminate\Database\Eloquent\Model;
 
-class ZecNanopoolPool extends ApiService {
+class ZecNanopoolPool extends ApiService implements PoolService {
 
 	public $name = 'zec.nanopool.org pool';
 	protected $fields = [
