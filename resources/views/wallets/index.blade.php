@@ -8,7 +8,7 @@
 
 			@include('commun.message')
 
-@if (count($wallets) > 0)
+@if (count($walletsGroup) > 0)
 	        <h2>List of wallets
                 <button class="pull-right btn btn-info btn-xs js-refresh-all">
                     <i class="fa fa-refresh"></i> Refresh All

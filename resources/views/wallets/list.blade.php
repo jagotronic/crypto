@@ -1,57 +1,60 @@
 
-                <table class="table task-table">
+                <table class="table task-table Wallet-list">
 
                     <!-- Table Headings -->
                     <thead>
-                        <th>Name</th>
-                        <th>Handler</th>
-                        <th>Status</th>
-                        <th>&nbsp;</th>
+                        <tr>
+                            <th>Name</th>
+                            <th>Handler</th>
+                            <th>Status</th>
+                            <th>&nbsp;</th>
+                        </tr>
                     </thead>
 
                     <!-- Table Body -->
                     <tbody>
-                        @foreach ($wallets as $wallet)
-                            <tr class="wallet{{ !empty($wallet->message) ? ' danger' : '' }}">
-                                <!-- Task Name -->
-                                <td class="table-text">
-                                    <div>{{ $wallet->name }}</div>
-                                </td>
-                                <td>
-                                    <div>{{ $wallet->handler }}</div>
-                                </td>
-                                <td>
-                                    <a href="javascript:;" class="js-status{{ !empty($wallet->message) ? ' text-danger' : '' }}" data-link="{{ URL::route('wallets.message', ['id' => $wallet->id], false) }}">{{ !empty($wallet->message) ? 'error' : 'OK' }}</a>
-                                </td>
-                                <td class="text-right">
-							        <form style="display: inline-block;" action="{{ url('wallets/' . $wallet->id) }}" method="POST">
-							            {{ csrf_field() }}
-							            {{ method_field('DELETE') }}
+@foreach ($walletsGroup as $type => $wallets)
+                        <tr class="Wallet-typeRow"><td colspan="4"><h4>{{ ucfirst($type) }}</h4></td></tr>
+@foreach ($wallets as $wallet)
+                        <tr class="wallet{{ !empty($wallet->message) ? ' text-danger' : '' }}">
+                            <!-- Task Name -->
+                            <td class="table-text">
+                                <div>{{ $wallet->name }}</div>
+                            </td>
+                            <td>
+                                <div>{{ $wallet->handler }}</div>
+                            </td>
+                            <td>
+                                <a href="javascript:;" class="js-status{{ !empty($wallet->message) ? ' text-danger' : '' }}" data-link="{{ URL::route('wallets.message', ['id' => $wallet->id], false) }}">{{ !empty($wallet->message) ? 'error' : 'OK' }}</a>
+                            </td>
+                            <td class="text-right">
+						        <form style="display: inline-block;" action="{{ url('wallets/' . $wallet->id) }}" method="POST">
+						            {{ csrf_field() }}
+						            {{ method_field('DELETE') }}
 
-							            <button type="submit" class="btn btn-danger btn-xs">
-							                <i class="fa fa-trash"></i> Delete
-							            </button>
-							        </form>
-                                    <a class="btn btn-success btn-xs" href="{{ url('wallets/'.$wallet->id.'/edit') }}">
-                                        <i class="fa fa-pencil"></i> Edit
-                                    </a>
-                                    <button class="btn btn-info btn-xs js-refresh" data-link="{{ URL::route('wallets.refresh', ['id' => $wallet->id], false) }}">
-                                        <i class="fa fa-refresh"></i> Refresh
-                                    </button>
+						            <button type="submit" class="btn btn-danger btn-xs">
+						                <i class="fa fa-trash"></i> Delete
+						            </button>
+						        </form>
+                                <a class="btn btn-success btn-xs" href="{{ url('wallets/'.$wallet->id.'/edit') }}">
+                                    <i class="fa fa-pencil"></i> Edit
+                                </a>
+                                <button class="btn btn-info btn-xs js-refresh" data-link="{{ URL::route('wallets.refresh', ['id' => $wallet->id], false) }}">
+                                    <i class="fa fa-refresh"></i> Refresh
+                                </button>
+                            </td>
+                        </tr>
+                            <tr class="balance balance-wallet-{{ $wallet->id }}">
+                                <td colspan="4" class="Wallet-balanceRow">
+    @forelse ($wallet->balances as $balance)
+                                    <small class="Wallet-balance">{{ $balance->value }} / <strong>{{ $balance->symbol }}</strong></small>
+    @empty
+                                    <small class="Wallet-balance text-muted">- - - -</small>
+    @endforelse
                                 </td>
                             </tr>
-                            @foreach($wallet->balances as $balance)
-                            <tr class="active balance balance-wallet-{{ $wallet->id }}">
-                                <td class="table-text">
-                                    <small>{{ $balance->symbol }}</small>
-                                </td>
-                                <td>
-                                    <small>{{ $balance->value }}</small>
-                                </td>
-                                <td colspan="2">&nbsp;</td>
-                            </tr>
-                            @endforeach
-                        @endforeach
+@endforeach
+@endforeach
                     </tbody>
                 </table>
                 <div class="modal fade" id="cryptoModal" tabindex="-1" role="dialog" aria-labelledby="cryptoModalLabel">
@@ -74,7 +77,7 @@
             $(function() {
                 $('.js-refresh').click(function() {
                     var $link = $(this).prop('disabled', true);
-                    var $tr = $link.closest('tr').addClass('info').removeClass('danger');
+                    var $tr = $link.closest('tr').addClass('info').removeClass('text-danger');
                     var $status = $tr.find('.js-status').html('loading...').removeClass('text-danger');
 
                     $.get($link.data('link'), {}, function(data) {
@@ -83,7 +86,7 @@
                         $link.prop('disabled', false);
 
                         if (data.message !== null) {
-                            $tr.addClass('danger');
+                            $tr.addClass('text-danger');
                             $status.addClass('text-danger');
                         } else {
                             $tr.nextAll('.balance-wallet-' + data.id).remove();

@@ -5,9 +5,10 @@ namespace App\Services\Wallets;
 use App\Wallet;
 use App\Balance;
 use App\Services\ApiService;
+use App\Services\Wallets\Type\PoolService;
 use Illuminate\Database\Eloquent\Model;
 
-class CryptohubPool extends ApiService {
+class CryptohubPool extends ApiService implements PoolService {
 
 	public $name = 'Cryptohub pool';
 	protected $fields = [
