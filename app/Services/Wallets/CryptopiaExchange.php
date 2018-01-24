@@ -15,8 +15,8 @@ class CryptopiaExchange extends ApiService {
         'apisecret' => 'text',
 	];
     public $validation = [
-        'apikey' => 'required|string|min:24|max:24',
-        'apisecret' => 'required|string|min:36|max:36'
+        'apikey' => 'required|string|min:1|max:100',
+        'apisecret' => 'required|string|min:1|max:100'
     ];
 
 	public function handle (Model $wallet)
