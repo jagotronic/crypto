@@ -4,6 +4,8 @@ namespace App\Services\Currencies;
 
 use App\Currency;
 use Illuminate\Database\Eloquent\Model;
+use \Cache;
+use Carbon\Carbon;
 
 class Coinmarketcap extends CurrencyService {
 
@@ -14,7 +16,7 @@ class Coinmarketcap extends CurrencyService {
     public $validation = [
         'api_path' => 'required|string',
     ];
-    private static $all_currencies = null;
+//    private static $all_currencies = null;
 
     public function handle(Model $currency)
     {
@@ -52,17 +54,25 @@ class Coinmarketcap extends CurrencyService {
 
     public function find(string $symbol)
     {
-        if (is_null(self::$all_currencies)) {
-            $json = $this->apiCall('v1/ticker/?limit=10000&convert=CAD');
+//        $return_value = null;
+        $all_currencies = [];
 
-            self::$all_currencies = $json;
+        //TODO update prices more frequently HOW?
+        //Check in cache for $symbol value
+        if (!Cache::has(__CLASS__)) {
+            $expiresAt = Carbon::now()->addMinutes(5);
+            $all_currencies = $this->apiCall('v1/ticker/?limit=10000&convert=CAD');
+
+//            dd($all_currencies);
+
+            Cache::put(__CLASS__, json_encode($all_currencies), $expiresAt);
+        } else {
+            $all_currencies = json_decode(Cache::get(__CLASS__), true);
         }
 
-        foreach (self::$all_currencies as $currency) {
-
+        foreach ($all_currencies as $currency) {
             if ($currency['symbol'] === $symbol) {
                 $currencyData = $this->getCurrencyDataModel($symbol, __CLASS__);
-
                 $currencyData['name'] = $currency['name'];
                 $currencyData['icon_src'] = $this->getIconSrc($currency['id']);
                 $currencyData['webpage_url'] = $this->getWebPageUrl($currency['id']);

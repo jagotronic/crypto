@@ -32,7 +32,7 @@ class CurrencyFactory extends Factory
         foreach (config('currencyservices') as $serviceClassPath) {
             $service = new $serviceClassPath();
             $currencyData = $service->find($symbol);
-
+//            dd($currencyData);
             if (!is_null($currencyData)) {
                 $currency = self::createCurrency($currencyData);
                 break;

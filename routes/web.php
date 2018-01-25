@@ -34,5 +34,6 @@ Route::group(['middleware' => ['auth']], function($router) {
 	Route::get('/currencies/{currency}/message', 'CurrencyController@message')->name('currencies.message');
 	Route::get('/wallets/{wallet}/refresh', 'WalletController@refresh')->name('wallets.refresh');
 	Route::get('/wallets/{wallet}/message', 'WalletController@message')->name('wallets.message');
+	Route::get('/mining-calculator', 'MiningCalculatorController@index')->name('mining.calculator');
 });
 

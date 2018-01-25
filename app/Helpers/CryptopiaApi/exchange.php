@@ -5,8 +5,8 @@ abstract class Exchange
    // ----- Variables -----
 
    // Each exchanges class construction function should set these and test the connection to the API
-   private $privateKey = '';    // API Secret
-   private $publicKey = '';     // API Key
+    protected $privateKey = '';    // API Secret
+    protected $publicKey = '';     // API Key
 
    /**
     * Symbols is an array of all the trading pairs on a given exchange.

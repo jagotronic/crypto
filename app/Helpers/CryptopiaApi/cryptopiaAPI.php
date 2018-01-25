@@ -3,7 +3,7 @@ include 'exchange.php';
 
 class Cryptopia extends Exchange{
     
-   public function __construct($priv, $pub) {
+   public function __construct($priv = '', $pub = '') {
       $this->privateKey = $priv;
       $this->publicKey = $pub;
 
@@ -90,7 +90,29 @@ class Cryptopia extends Exchange{
 
    // @todo add setBalance
 
-   Public function getBalance() {
+    Public function getCurrencies() {
+        $result = $this->apiCall("GetCurrencies" );
+        $result = json_decode($result, true);
+        if( $result['Success'] == "true" ) {
+            // @todo ADD CODE TO REFORMAT Array to standard
+            return $result['Data'];
+        } else {
+            throw new Exception("Can't get balances, Error: " . $result['Error'] );
+        }
+    }
+
+    Public function getTradePairs() {
+        $result = $this->apiCall("GetTradePairs" );
+        $result = json_decode($result, true);
+        if( $result['Success'] == "true" ) {
+            // @todo ADD CODE TO REFORMAT Array to standard
+            return $result['Data'];
+        } else {
+            throw new Exception("Can't get balances, Error: " . $result['Error'] );
+        }
+    }
+
+    Public function getBalance() {
       $result = $this->apiCall("GetBalance", array('Currency'=> "") ); // "" for All currency balances
       $result = json_decode($result, true);
       if( $result['Success'] == "true" ) {
