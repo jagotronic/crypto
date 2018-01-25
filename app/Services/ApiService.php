@@ -42,6 +42,7 @@ abstract class ApiService {
         curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
         curl_setopt($ch, CURLOPT_ENCODING, 'gzip, deflate'); 
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
         return $ch;
