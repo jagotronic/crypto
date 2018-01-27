@@ -89,15 +89,10 @@
                             $tr.addClass('text-danger');
                             $status.addClass('text-danger');
                         } else {
-                            $tr.nextAll('.balance-wallet-' + data.id).remove();
+                            var $container = $tr.nextAll('.balance-wallet-' + data.id).find('.Wallet-balanceRow').empty();
+
                             $(data.balances).each(function() {
-                                $([
-                                    '<tr class="active balance balance-wallet-'+ data.id +'">',
-                                        '<td class="table-text"><small>'+ this.symbol +'</small></td>',
-                                        '<td><small>'+ this.value +'</small></td>',
-                                        '<td colspan="2">&nbsp;</td>',
-                                    '</tr>',
-                                ].join('')).insertAfter($tr);
+                                $('<small class="Wallet-balance">'+ this.value +' / <strong>'+ this.symbol +'</strong></small>').appendTo($container);
                             });
                         }
                     });

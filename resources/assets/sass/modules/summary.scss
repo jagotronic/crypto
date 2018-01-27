@@ -68,10 +68,11 @@
 	margin-bottom: 10px;
 	border-right-width: 0 !important;
 	border-top-width: 0 !important;
+	text-align: left !important;
 
 	a {
 		margin-top: 20px;
-		display: block;
+		display: inline-block;
 		padding: 5px;
 
 		&:hover {
