@@ -18,8 +18,10 @@ return [
 	App\Services\Wallets\CrowdcoinWallet::class,
 	App\Services\Wallets\GoaWallet::class,
 	App\Services\Wallets\DenariusWallet::class,
+	App\Services\Wallets\TuneWallet::class,
 	// Pools
 	App\Services\Wallets\AltminerPool::class,
+	App\Services\Wallets\ArcPool::class,
 	App\Services\Wallets\CryptohubPool::class,
 	App\Services\Wallets\MineprojectPool::class,
 	App\Services\Wallets\UniminingPool::class,
