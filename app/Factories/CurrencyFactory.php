@@ -17,7 +17,6 @@ class CurrencyFactory extends Factory
     public static function createIfNotExists(string $symbol)
     {
         $currency = self::get($symbol);
-
         if (is_null($currency)) {
             $currency = self::seekForCurrency($symbol);
         }
@@ -72,8 +71,8 @@ class CurrencyFactory extends Factory
         $currency->percent_change_7d = $currencyData['percent_change_7d'];
         $currency->description = '';
         $currency->data = $currencyData['data'];
-        // $currency->save();
-        // $currency->fresh();
+        $currency->save();
+        $currency->fresh();
 
         return $currency;
     }
