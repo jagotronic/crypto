@@ -20,7 +20,7 @@ class CryptopiaExchange extends ApiService implements ExchangeService {
         'apisecret' => 'required|string|min:1|max:100'
     ];
 
-	public function handle (Model $wallet)
+	public function handle(Model $wallet)
 	{
 		$apikey = $wallet->raw_data['apikey'];
 		$api_secret = $wallet->raw_data['apisecret'];

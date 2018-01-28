@@ -26,14 +26,14 @@ class Coinmarketcap extends CurrencyService {
         $currency->name = $currencyData['name'];
         $currency->icon_src = $currencyData['icon_src'];
         $currency->webpage_url = $currencyData['webpage_url'];
-        $currency->usd_value = $currencyData['price_usd'];
-        $currency->cad_value = $currencyData['price_cad'];
-        $currency->btc_value = $currencyData['price_btc'];
+        $currency->usd_value = $currencyData['usd_value'];
+        $currency->cad_value = $currencyData['cad_value'];
+        $currency->btc_value = $currencyData['btc_value'];
         $currency->percent_change_1h = $currencyData['percent_change_1h'];
         $currency->percent_change_24h = $currencyData['percent_change_24h'];
         $currency->percent_change_7d = $currencyData['percent_change_7d'];
         $currency->save();
-
+    
         return $currency->fresh();
     }
 
