@@ -2,7 +2,6 @@
 
 namespace App\Services\Wallets;
 
-use App\Wallet;
 use App\Balance;
 use App\Services\ApiService;
 use App\Services\Wallets\Type\WalletService;
@@ -38,6 +37,7 @@ class DenariusWallet extends ApiService implements WalletService {
         if (!is_numeric($value) || empty($value)) {
             $value = 0;
         }
+
         if (is_null($balance)) {
             $balance = new Balance();
             $balance->wallet_id = $wallet->id;

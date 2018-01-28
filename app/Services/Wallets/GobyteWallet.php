@@ -2,7 +2,6 @@
 
 namespace App\Services\Wallets;
 
-use App\Wallet;
 use App\Balance;
 use App\Services\ApiService;
 use App\Services\Wallets\Type\WalletService;
@@ -21,19 +20,17 @@ class GobyteWallet extends ApiService implements WalletService {
 	public function handle (Model $wallet)
 	{
 		$address = $wallet->raw_data['address'];
-		$nonce = time();
 		$uri = 'http://gobyte.ezmine.io/ext/getbalance/'. $address;
 
         $ch = $this->initCurl($uri);
-        $result = $this->execute($ch);
+        $value = (float)$this->execute($ch);
         $info = curl_getinfo($ch);
         curl_close($ch);
 
-        if (empty($result)) {
-            $this->throwException(__CLASS__, 'SERVER NOT RESPONDING', $result, $info);
+        if (!is_numeric($value)) {
+            $this->throwException(__CLASS__, 'INVALID VALUE', $value, $info);
         }
 
-		$value = json_decode($result);
 		$symbol = 'GBX';
 		$balance = $wallet->balancesOfSymbol($symbol);
 

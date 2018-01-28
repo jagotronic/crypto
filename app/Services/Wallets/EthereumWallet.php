@@ -2,7 +2,6 @@
 
 namespace App\Services\Wallets;
 
-use App\Wallet;
 use App\Balance;
 use App\Services\ApiService;
 use App\Services\Wallets\Type\WalletService;
@@ -33,6 +32,11 @@ class EthereumWallet extends ApiService implements WalletService {
         }
 
         $json = json_decode($result);
+
+        if ($json->status == '0') {
+            $this->throwException(__CLASS__, $json->result, $result, $info);
+        }
+
         $value = (float)$json->result / 1000000000000000000;
         $symbol = 'ETH';
         $balance = $wallet->balancesOfSymbol($symbol);
