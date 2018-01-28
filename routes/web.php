@@ -19,6 +19,8 @@ Auth::routes();
 
 Route::group(['middleware' => ['auth']], function($router) {
 
+	Route::get('/currencies/refresh', 'CurrencyController@refreshAll')->name('currencies.refresh_all');
+	Route::get('/wallets/refresh', 'WalletController@refreshAll')->name('wallets.refresh_all');
 
 	$router->resources([
 		'gpus' => 'GpuController',
