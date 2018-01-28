@@ -2,7 +2,7 @@
 
 namespace App\Services\Currencies;
 
-use App\Currency;
+use Cache;
 use Illuminate\Database\Eloquent\Model;
 
 class Coinmarketcap extends CurrencyService {
@@ -14,21 +14,18 @@ class Coinmarketcap extends CurrencyService {
     public $validation = [
         'api_path' => 'required|string',
     ];
-    private static $all_currencies = null;
 
     public function handle(Model $currency)
     {
-        $apiPath = $currency->raw_data['api_path'];
-        $json = $this->apiCall('v1/ticker/'.$apiPath.'/?convert=CAD');
+        $currencyData = $this->find($currency->symbol);
 
-        if (count($json) !== 1) {
+        if (empty($currencyData)) {
             $this->throwException(__CLASS__, 'INVALID RESPONSE', $result, $info);
         }
 
-        $currencyData = array_pop($json);
         $currency->name = $currencyData['name'];
-        $currency->icon_src = $this->getIconSrc($apiPath);
-        $currency->webpage_url = $this->getWebPageUrl($apiPath);
+        $currency->icon_src = $currencyData['icon_src'];
+        $currency->webpage_url = $currencyData['webpage_url'];
         $currency->usd_value = $currencyData['price_usd'];
         $currency->cad_value = $currencyData['price_cad'];
         $currency->btc_value = $currencyData['price_btc'];
@@ -52,13 +49,9 @@ class Coinmarketcap extends CurrencyService {
 
     public function find(string $symbol)
     {
-        if (is_null(self::$all_currencies)) {
-            $json = $this->apiCall('v1/ticker/?limit=10000&convert=CAD');
+        $all_currencies = $this->apiCall('v1/ticker/?limit=10000&convert=CAD');
 
-            self::$all_currencies = $json;
-        }
-
-        foreach (self::$all_currencies as $currency) {
+        foreach ($all_currencies as $currency) {
 
             if ($currency['symbol'] === $symbol) {
                 $currencyData = $this->getCurrencyDataModel($symbol, __CLASS__);
@@ -86,27 +79,42 @@ class Coinmarketcap extends CurrencyService {
     private function apiCall($endpoint)
     {
         $url = 'https://api.coinmarketcap.com/' . $endpoint;
-        $headers = array(
-            'Content-type: text/xml;charset=UTF-8', 
-            'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8', 
-            'Cache-Control: no-cache', 
-            'Pragma: no-cache', 
-        );
+        $key = 'Coinmarketcap::'.$endpoint;
+        $json = null;
 
-        $ch = $this->initCurl($url, $headers);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        $result = $this->execute($ch);
-        $info = curl_getinfo($ch);
-        curl_close($ch);
+        if (Cache::has($key)) {
+            $cache = Cache::get($key);
 
-        if (empty($result)) {
-            $this->throwException(__CLASS__, 'SERVER NOT RESPONDING', $result, $info);
+            if (!empty($cache)) {
+                $json = unserialize($cache);
+            }
         }
 
-        $json = json_decode($result, true);
+        if (empty($json)) {
+            $headers = array(
+                'Content-type: text/xml;charset=UTF-8', 
+                'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8', 
+                'Cache-Control: no-cache', 
+                'Pragma: no-cache', 
+            );
 
-        if (!is_array($json)) {
-            $this->throwException(__CLASS__, 'INVALID RESPONSE', $result, $info);
+            $ch = $this->initCurl($url, $headers);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            $result = $this->execute($ch);
+            $info = curl_getinfo($ch);
+            curl_close($ch);
+
+            if (empty($result)) {
+                $this->throwException(__CLASS__, 'SERVER NOT RESPONDING', $result, $info);
+            }
+
+            $json = json_decode($result, true);
+
+            if (!is_array($json)) {
+                $this->throwException(__CLASS__, 'INVALID RESPONSE', $result, $info);
+            }
+
+            Cache::put($key, serialize($json), 10);
         }
 
         return $json;
