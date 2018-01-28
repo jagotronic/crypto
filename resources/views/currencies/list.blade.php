@@ -109,7 +109,10 @@
                 });
 
                 $('.js-refresh-all').click(function() {
-                    $('.js-refresh:not([disabled])').trigger('click');
+                    $('.js-refresh').prop('disabled', true);
+                    $.get($(this).data('link'), {}, function(response) {
+                        window.location.reload();
+                    });
                 });
             });
         </script>

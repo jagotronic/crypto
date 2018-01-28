@@ -3,7 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Helpers\CurrenciesUpdater;
+use App\Factories\CurrencyServiceFactory;
+use App\Factories\CurrencyFactory;
 
 class Currency extends Model
 {
@@ -36,7 +37,38 @@ class Currency extends Model
 
     public function refresh()
     {
-    	CurrenciesUpdater::update($this);
+        $this->message = null;
+
+        try {
+            $handler = CurrencyServiceFactory::get($this->handler);
+
+            if (empty($handler)) {
+                CurrencyFactory::updateCurrencyService($this);
+                $handler = CurrencyServiceFactory::get($this->handler);
+            }
+
+            $handler->handle($this);
+        } catch (\Exception $e) {
+            $message = json_decode($e->getMessage(), true);
+
+            if (is_null($message)) {
+                $message = $e->getMessage();
+            }
+
+            if (!is_array($message)) {
+                $message = ['message' => $message];
+            }
+
+            $message['trace'] = $e->getTraceAsString();
+            $this->message = json_encode($message);
+        }
+
+        if ($this->isDirty()) {
+            $this->save();
+            $this->fresh();
+        }
+
+        return $this;
     }
 
     static function getHandlers()

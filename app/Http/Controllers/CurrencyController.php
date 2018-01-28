@@ -124,28 +124,17 @@ class CurrencyController extends Controller
      */
     public function refresh(Currency $currency)
     {
-        $currency->message = null;
+        return $currency->refresh();
+    }
 
-        try {
-            CurrenciesUpdater::update($currency);
-        } catch (\Exception $e) {
-            $message = json_decode($e->getMessage(), true);
-
-            if (is_null($message)) {
-                $message = $e->getMessage();
-            }
-
-            if (!is_array($message)) {
-                $message = ['message' => $message];
-            }
-
-            $message['trace'] = $e->getTraceAsString();
-            $currency->message = json_encode($message);
-        }
-
-        $currency->save();
-
-        return $currency->fresh();
+    /**
+     * Refresh all resources.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function refreshAll()
+    {
+        return CurrenciesUpdater::updateAll();
     }
 
     /**

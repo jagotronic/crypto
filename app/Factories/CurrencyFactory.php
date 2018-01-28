@@ -42,9 +42,23 @@ class CurrencyFactory extends Factory
         return $currency;
     }
 
-    private static function createCurrency(array $currencyData)
+    public static function updateCurrencyService(Currency $currency)
     {
-        $currency = new Currency();
+        foreach (config('currencyservices') as $serviceClassPath) {
+            $service = new $serviceClassPath();
+            $currencyData = $service->find($currency->symbol);
+
+            if (!is_null($currencyData)) {
+                $currency = self::updateCurrency($currency, $currencyData);
+                break;
+            }
+        }
+
+        return $currency;
+    }
+
+    private static function updateCurrency(Currency $currency, array $currencyData)
+    {
         $currency->name = $currencyData['name'];
         $currency->symbol = $currencyData['symbol'];
         $currency->handler = $currencyData['handler'];
@@ -58,8 +72,16 @@ class CurrencyFactory extends Factory
         $currency->percent_change_7d = $currencyData['percent_change_7d'];
         $currency->description = '';
         $currency->data = $currencyData['data'];
-        $currency->save();
+        // $currency->save();
+        // $currency->fresh();
 
         return $currency;
+    }
+
+    private static function createCurrency(array $currencyData)
+    {
+        $currency = new Currency();
+
+        return self::updateCurrency($currency, $currencyData);
     }
 }

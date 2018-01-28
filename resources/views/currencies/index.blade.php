@@ -10,7 +10,7 @@
 
 	    @if (count($currencies) > 0)
 	        <h2>List of currencies
-                <button class="pull-right btn btn-info btn-xs js-refresh-all">
+                <button data-link="{{ URL::route('currencies.refresh_all', [], false) }}" class="pull-right btn btn-info btn-xs js-refresh-all">
                     <i class="fa fa-refresh"></i> Refresh All
                 </button>
             </h2>
