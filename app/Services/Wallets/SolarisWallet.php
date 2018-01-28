@@ -2,7 +2,6 @@
 
 namespace App\Services\Wallets;
 
-use App\Wallet;
 use App\Balance;
 use App\Services\ApiService;
 use App\Services\Wallets\Type\WalletService;
@@ -24,15 +23,14 @@ class SolarisWallet extends ApiService implements WalletService {
 		$uri = 'https://solaris.blockexplorer.pro/ext/getbalance/'. $address;
 
         $ch = $this->initCurl($uri);
-        $result = $this->execute($ch);
+        $value = (float)$this->execute($ch);
         $info = curl_getinfo($ch);
         curl_close($ch);
 
-        if (empty($result)) {
-            $this->throwException(__CLASS__, 'SERVER NOT RESPONDING', $result, $info);
+        if (!is_numeric($value)) {
+            $this->throwException(__CLASS__, 'INVALID VALUE', $value, $info);
         }
 
-		$value = json_decode($result);
 		$symbol = 'XLR';
 		$balance = $wallet->balancesOfSymbol($symbol);
 

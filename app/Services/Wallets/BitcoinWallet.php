@@ -2,7 +2,6 @@
 
 namespace App\Services\Wallets;
 
-use App\Wallet;
 use App\Balance;
 use App\Services\ApiService;
 use App\Services\Wallets\Type\WalletService;
@@ -28,7 +27,7 @@ class BitcoinWallet extends ApiService implements WalletService {
         $info = curl_getinfo($ch);
         curl_close($ch);
 
-        if (empty($result)) {
+        if (is_null($result) || $result === '') {
             $this->throwException(__CLASS__, 'SERVER NOT RESPONDING', $result, $info);
         }
 
@@ -36,6 +35,10 @@ class BitcoinWallet extends ApiService implements WalletService {
 
         if (!is_object($json)) {
             $this->throwException(__CLASS__, 'INVALID JSON', $result, $info);
+        }
+
+        if (!empty($json->error)) {
+            $this->throwException(__CLASS__, $json->error, $result, $info);
         }
 
         $value = (float)$json->balance;

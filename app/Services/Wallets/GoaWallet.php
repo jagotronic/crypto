@@ -2,7 +2,6 @@
 
 namespace App\Services\Wallets;
 
-use App\Wallet;
 use App\Balance;
 use App\Services\ApiService;
 use App\Services\Wallets\Type\WalletService;
@@ -21,7 +20,6 @@ class GoaWallet extends ApiService implements WalletService {
 	public function handle (Model $wallet)
 	{
 		$address = $wallet->raw_data['address'];
-
 		$uri = 'http://goacoin.be/ext/getaddress/'. $address;
 
         $ch = $this->initCurl($uri);
@@ -34,7 +32,12 @@ class GoaWallet extends ApiService implements WalletService {
         }
 
         $json = json_decode($result);
-        $value = json_decode($json->balance);
+
+        if (!empty($json->error)) {
+            $this->throwException(__CLASS__, $json->error, $result, $info);
+        }
+
+        $value = (float)$json->balance;
 		$symbol = 'GOA';
 		$balance = $wallet->balancesOfSymbol($symbol);
 

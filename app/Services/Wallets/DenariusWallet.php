@@ -2,7 +2,6 @@
 
 namespace App\Services\Wallets;
 
-use App\Wallet;
 use App\Balance;
 use App\Services\ApiService;
 use App\Services\Wallets\Type\WalletService;
@@ -24,12 +23,12 @@ class DenariusWallet extends ApiService implements WalletService {
         $uri = 'https://denariusexplorer.org/ext/getbalance/'. $address; //&apikey=YourApiKeyToken
 
         $ch = $this->initCurl($uri);
-        $value = $this->execute($ch);
+        $value = (float)$this->execute($ch);
         $info = curl_getinfo($ch);
         curl_close($ch);
 
-        if (empty($value)) {
-            $this->throwException(__CLASS__, 'SERVER NOT RESPONDING', $value, $info);
+        if (!is_numeric($value)) {
+            $this->throwException(__CLASS__, 'INVALID VALUE', $value, $info);
         }
 
         $symbol = 'DNR';

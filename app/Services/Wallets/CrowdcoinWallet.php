@@ -2,7 +2,6 @@
 
 namespace App\Services\Wallets;
 
-use App\Wallet;
 use App\Balance;
 use App\Services\ApiService;
 use App\Services\Wallets\Type\WalletService;
@@ -21,16 +20,15 @@ class CrowdcoinWallet extends ApiService implements WalletService {
     public function handle (Model $wallet)
     {
         $address = $wallet->raw_data['address'];
-        // $uri = 'http://crowdcoin.site:3001/ext/getbalance/'. $address; //&apikey=YourApiKeyToken
         $uri = 'http://explorer.cryptopros.us/ext/getbalance/'. $address; //&apikey=YourApiKeyToken
 
         $ch = $this->initCurl($uri);
-        $value = $this->execute($ch);
+        $value = (float)$this->execute($ch);
         $info = curl_getinfo($ch);
         curl_close($ch);
 
-        if (empty($value)) {
-            $this->throwException(__CLASS__, 'SERVER NOT RESPONDING', $value, $info);
+        if (!is_numeric($value)) {
+            $this->throwException(__CLASS__, 'INVALID VALUE', $value, $info);
         }
 
         $symbol = 'CRC';
