@@ -118,28 +118,18 @@ class WalletController extends Controller
      */
     public function refresh(Wallet $wallet)
     {
-        $wallet->message = null;
-
-        try {
-            WalletsUpdater::update($wallet);
-        } catch (\Exception $e) {
-            $message = json_decode($e->getMessage(), true);
-
-            if (is_null($message)) {
-                $message = $e->getMessage();
-            }
-            
-            if (!is_array($message)) {
-                $message = ['message' => $message];
-            }
-
-            $message['trace'] = $e->getTraceAsString();
-            $wallet->message = json_encode($message);
-        }
-
-        $wallet->save();
-
+        $wallet->refresh();
         return $wallet->fresh(['balances']);
+    }
+
+    /**
+     * Refresh all resources.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function refreshAll()
+    {
+        return WalletsUpdater::updateAll();
     }
 
     /**

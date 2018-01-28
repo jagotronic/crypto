@@ -64,6 +64,36 @@ class Wallet extends Model
         return 'other';
     }
 
+    public function refresh()
+    {
+        $this->message = null;
+
+        try {
+            $handler = WalletServiceFactory::get($this->handler);
+            $handler->handle($this);
+        } catch (\Exception $e) {
+            $message = json_decode($e->getMessage(), true);
+
+            if (is_null($message)) {
+                $message = $e->getMessage();
+            }
+            
+            if (!is_array($message)) {
+                $message = ['message' => $message];
+            }
+
+            $message['trace'] = $e->getTraceAsString();
+            $this->message = json_encode($message);
+        }
+
+        if ($this->isDirty()) {
+            $this->save();
+            $this->fresh();
+        }
+
+        return $this;
+    }
+
     static function getHandlers()
     {
         $handlers = [];

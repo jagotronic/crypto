@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container" id="Wallet-container">
     <div class="panel panel-default">
         <div class="panel-heading">Wallets</div>
 	    <div class="panel-body">
@@ -10,7 +10,7 @@
 
 @if (count($walletsGroup) > 0)
 	        <h2>List of wallets
-                <button class="pull-right btn btn-info btn-xs js-refresh-all">
+                <button data-link="{{ URL::route('wallets.refresh_all', [], false) }}" class="pull-right btn btn-info btn-xs js-refresh-all">
                     <i class="fa fa-refresh"></i> Refresh All
                 </button>
             </h2>

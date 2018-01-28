@@ -110,7 +110,13 @@
                 });
 
                 $('.js-refresh-all').click(function() {
-                    $('.js-refresh:not([disabled])').trigger('click');
+                    $('.btn').prop('disabled', true);
+                    $('#Wallet-container').imarcomLoader();
+
+                    $.get($(this).data('link'), {}, function(response) {
+                        window.location.reload();
+                    });
+
                 });
             });
         </script>
