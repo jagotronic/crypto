@@ -7,6 +7,7 @@ return [
 	App\Services\Wallets\CryptopiaExchange::class,
 	App\Services\Wallets\KucoinExchange::class,
 	App\Services\Wallets\QuadrigacxExchange::class,
+	App\Services\Wallets\StocksExchangeExchange::class,
 	App\Services\Wallets\YobitExchange::class,
 	// Wallets
 	App\Services\Wallets\BitcoinWallet::class,
