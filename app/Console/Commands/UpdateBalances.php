@@ -39,11 +39,11 @@ class UpdateBalances extends Command
      */
     public function handle()
     {
-        $this->info('Starting UpdateCurrencies job');
-        UpdateCurrencies::dispatch();
-
         $this->info('Starting UpdateWallets job');
         UpdateWallets::dispatch();
+
+        $this->info('Starting UpdateCurrencies job');
+        UpdateCurrencies::dispatch();
 
         $this->info('Should update history here');
     }
