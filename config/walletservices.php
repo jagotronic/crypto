@@ -17,6 +17,7 @@ return [
 	App\Services\Wallets\EthereumWallet::class,
 	App\Services\Wallets\GoaWallet::class,
 	App\Services\Wallets\GobyteWallet::class,
+	App\Services\Wallets\MuncoinWallet::class,
 	App\Services\Wallets\SolarisWallet::class,
 	App\Services\Wallets\TuneWallet::class,
 	App\Services\Wallets\ZcashWallet::class,
